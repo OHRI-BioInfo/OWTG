@@ -43,7 +43,7 @@ function getAddresses(){
 
 function findAlias($address){
     global $aliasFile;
-    $aliasArray = preg_split("/[=\s]/",get($aliasFile),-1,PREG_SPLIT_NO_EMPTY);
+    $aliasArray = preg_split("/[=\n]/",get($aliasFile),-1,PREG_SPLIT_NO_EMPTY);
     $i = 0;
     foreach($aliasArray as $curString){
         if($curString == $address){

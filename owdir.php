@@ -21,7 +21,8 @@ function getAddresses(){
     $directoryArray = explode(",",get("/"));
     $i = 0;
     foreach ($directoryArray as $currentDir){
-        if($currentDir == "simultaneous") #Due to a bug, reading simultaneous crashes owserver
+        #We don't want to include this directory, as it isn't a device
+        if($currentDir == "simultaneous/")
             continue;
         if(get("/".$currentDir."temperature") != NULL){
             $addressArray[$i] = get("/".$currentDir."address");

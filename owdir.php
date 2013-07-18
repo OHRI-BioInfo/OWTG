@@ -11,14 +11,14 @@ $adapter = "localhost:4304";
 $init_result = init( $adapter );
 if ( $init_result != '1' )
 {
-    echo "could not initialize the 1-wire bus.\n";
+    echo "Could not initialize the 1-wire bus.\n";
     exit(1);
 }
 
 function getAddresses(){
     #Get directory listing, separate into an array
     $addressArray;
-    $directoryArray = explode(",",get('/'));
+    $directoryArray = explode(",",get("/"));
     $i = 0;
     foreach ($directoryArray as $currentDir){
         if($currentDir == "simultaneous") #Due to a bug, reading simultaneous crashes owserver
@@ -33,7 +33,7 @@ function getAddresses(){
 
 function findAlias($address){
     global $aliasFile;
-    $aliasArray = preg_split('/[=\s]/',get($aliasFile),-1,PREG_SPLIT_NO_EMPTY);
+    $aliasArray = preg_split("/[=\s]/",get($aliasFile),-1,PREG_SPLIT_NO_EMPTY);
     $i = 0;
     foreach($aliasArray as $curString){
         if($curString == $address){
@@ -44,9 +44,14 @@ function findAlias($address){
     return "";
 }
 $addressArray = getAddresses();
-#echo "<table>";
-#echo "<tr>";
-echo findAlias($addressArray[0]);
+echo "<table>\n";
+foreach($addressArray as $curAddress){
+    echo "<tr>\n";
+    echo "<td>".$curAddress."</td>";
+    echo "<td>".findAlias($curAddress)."</td>";
+    echo "<td>button</td>";
+    echo "</tr>";
+}
 
 finish();
 

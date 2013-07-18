@@ -4,6 +4,7 @@
 <body>
 <?php
 error_reporting(E_ALL);
+$aliasFile = "/settings/alias/list";
 $adapter = "localhost:4304";
 
 #Connect to owserver
@@ -29,7 +30,24 @@ function getAddresses(){
     }
     return $addressArray;
 }
-getAddresses();
+
+function findAlias($address){
+    global $aliasFile;
+    $aliasArray = preg_split('/[=\s]/',get($aliasFile),-1,PREG_SPLIT_NO_EMPTY);
+    $i = 0;
+    foreach($aliasArray as $curString){
+        if($curString == $address){
+            return $aliasArray[$i+1];
+        }
+        $i++;
+    }
+    return "";
+}
+$addressArray = getAddresses();
+#echo "<table>";
+#echo "<tr>";
+echo findAlias($addressArray[0]);
+
 finish();
 
 ?>

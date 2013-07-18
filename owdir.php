@@ -1,5 +1,14 @@
 <html>
 <head>
+    <style type="text/css">
+    table{
+        border-collapse:collapse;
+        border:1px solid black;
+    }th,td{
+        border: 1px solid black;
+        padding: 4px;
+    }
+    </style>
 </head>
 <body>
 <?php
@@ -46,13 +55,20 @@ function findAlias($address){
 }
 $addressArray = getAddresses();
 echo "<table>\n";
+$i=1;
+echo "<th>Device Address</th><th>Alias</th><th>Modify</th>";
 foreach($addressArray as $curAddress){
-    echo "<tr>\n";
+    if($i%2 == 0)
+        echo "<tr style=\"background-color:lightgrey;\">\n";
+    else
+        echo "<tr>\n";
     echo "<td>".$curAddress."</td>";
     echo "<td>".findAlias($curAddress)."</td>";
     echo "<td>button</td>";
     echo "</tr>";
+    $i++;
 }
+echo "</table>";
 
 finish();
 

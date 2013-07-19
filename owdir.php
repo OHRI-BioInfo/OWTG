@@ -43,7 +43,7 @@ function getAddresses(){
 
 function findAlias($address){
     global $aliasFile;
-    $aliasArray = preg_split("/[=\n]/",get($aliasFile),-1,PREG_SPLIT_NO_EMPTY);
+    $aliasArray = preg_split("/[=\r\n]/",get($aliasFile),-1,PREG_SPLIT_NO_EMPTY);
     $i = 0;
     foreach($aliasArray as $curString){
         if($curString == $address){
@@ -63,9 +63,10 @@ foreach($addressArray as $curAddress){
     else
         echo "<tr>\n";
     echo "<td>".$curAddress."</td>";
-    echo "<td>".findAlias($curAddress)."</td>";
-    echo "<td>button</td>";
-    echo "</tr>";
+    echo "<form name=\"form".$i."\" action=\"save_alias.php\" method=\"get\">";
+    echo "<td><input name=\"alias\" type=\"text\" value=\"".findAlias($curAddress)."\"></input></td>\n";
+    echo "<td><input type=\"submit\" value=\"Modify\"></td></form>";
+    echo "</tr>\n";
     $i++;
 }
 echo "</table>";

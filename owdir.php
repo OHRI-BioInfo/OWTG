@@ -62,10 +62,11 @@ foreach($addressArray as $curAddress){
         echo "<tr style=\"background-color:lightgrey;\">\n";
     else
         echo "<tr>\n";
-    echo "<td>".$curAddress."</td>";
-    echo "<form name=\"form".$i."\" action=\"save_alias.php\" method=\"get\">";
-    echo "<td><input name=\"alias\" type=\"text\" value=\"".findAlias($curAddress)."\"></input></td>\n";
-    echo "<td><input type=\"submit\" value=\"Modify\"></td></form>";
+    echo "<td>".$curAddress."</td>\n";
+    echo "<form name=\"form".$i."\" action=\"save_alias.php\" method=\"get\">\n";
+    echo "<input type=\"hidden\" name=\"address\" value=\"".$curAddress."\" />\n";
+    echo "<td><input name=\"alias\" type=\"text\" value=\"".findAlias($curAddress)."\" /></td>\n";
+    echo "<td><input type=\"submit\" value=\"Modify\" /></td></form>\n";
     echo "</tr>\n";
     $i++;
 }

@@ -11,6 +11,7 @@ $ow = new OWNet($adapter);
 $ow->set("/".$address."/alias",$alias); 
 #Copy the internal alias file to the external one, to preserve aliases
 $fileData = $ow->read($aliasFile);
+$fileData = str_replace("\r","",$fileData);
 file_put_contents($externalAliasFile,$fileData);
 
 unset($ow);

@@ -13,26 +13,21 @@
 <body>
 <?php
 include "settings.php";
-
-#Connect to owserver
-$init_result = init( $adapter );
-if ( $init_result != '1' )
-{
-    echo "Could not initialize the 1-wire bus.\n";
-    exit(1);
-}
+include "/opt/owfs/share/php/OWNet/ownet.php";
+$ow = new OWNet($adapter);
 
 function getAddresses(){
+	global $ow;
     #Get directory listing, separate into an array
     $addressArray;
-    $directoryArray = explode(",",get("/"));
+    $directoryArray = explode(",",$ow->dir("/")["data"]);
     $i = 0;
     foreach ($directoryArray as $currentDir){
         #We don't want to include this directory, as it isn't a device
-        if($currentDir == "simultaneous/")
+        if($currentDir == "/simultaneous")
             continue;
-        if(get("/".$currentDir."temperature") != NULL){
-            $addressArray[$i] = get("/".$currentDir."address");
+        if($ow->read($currentDir."/temperature") != NULL){
+            $addressArray[$i] = $ow->read($currentDir."/address");
             $i++;
         }
     }
@@ -51,14 +46,14 @@ foreach($addressArray as $curAddress){
     echo "<td>".$curAddress."</td>\n";
     echo "<form name=\"form".$i."\" action=\"save_alias.php\" method=\"get\">\n";
     echo "<input type=\"hidden\" name=\"address\" value=\"".$curAddress."\" />\n";
-    echo "<td><input name=\"alias\" type=\"text\" value=\"".get("/".$curAddress."/alias")."\" /></td>\n";
+    echo "<td><input name=\"alias\" type=\"text\" value=\"".$ow->read("/".$curAddress."/alias")."\" /></td>\n";
     echo "<td><input type=\"submit\" value=\"Modify\" /></td></form>\n";
     echo "</tr>\n";
     $i++;
 }
 echo "</table>";
 
-finish();
+unset($ow);
 
 ?>
 </body>

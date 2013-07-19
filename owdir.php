@@ -12,9 +12,7 @@
 </head>
 <body>
 <?php
-error_reporting(E_ALL);
-$aliasFile = "/settings/alias/list";
-$adapter = "localhost:4304";
+include "settings.php";
 
 #Connect to owserver
 $init_result = init( $adapter );
@@ -41,18 +39,6 @@ function getAddresses(){
     return $addressArray;
 }
 
-function findAlias($address){
-    global $aliasFile;
-    $aliasArray = preg_split("/[=\r\n]/",get($aliasFile),-1,PREG_SPLIT_NO_EMPTY);
-    $i = 0;
-    foreach($aliasArray as $curString){
-        if($curString == $address){
-            return $aliasArray[$i+1];
-        }
-        $i++;
-    }
-    return "";
-}
 $addressArray = getAddresses();
 echo "<table>\n";
 $i=1;
@@ -65,7 +51,7 @@ foreach($addressArray as $curAddress){
     echo "<td>".$curAddress."</td>\n";
     echo "<form name=\"form".$i."\" action=\"save_alias.php\" method=\"get\">\n";
     echo "<input type=\"hidden\" name=\"address\" value=\"".$curAddress."\" />\n";
-    echo "<td><input name=\"alias\" type=\"text\" value=\"".findAlias($curAddress)."\" /></td>\n";
+    echo "<td><input name=\"alias\" type=\"text\" value=\"".get("/".$curAddress."/alias")."\" /></td>\n";
     echo "<td><input type=\"submit\" value=\"Modify\" /></td></form>\n";
     echo "</tr>\n";
     $i++;

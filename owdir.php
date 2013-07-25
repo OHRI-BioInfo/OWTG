@@ -9,6 +9,7 @@
         padding: 4px;
     }
     </style>
+    <meta http-equiv="refresh" content="16">
 </head>
 <body>
 <?php
@@ -37,13 +38,14 @@ function getAddresses(){
 $addressArray = getAddresses();
 echo "<table>\n";
 $i=1;
-echo "<th>Device Address</th><th>Alias</th><th>Modify</th>";
+echo "<th>Device Address</th><th>Temperature</th></th><th>Alias</th><th>Modify</th>";
 foreach($addressArray as $curAddress){
     if($i%2 == 0)
         echo "<tr style=\"background-color:lightgrey;\">\n";
     else
         echo "<tr>\n";
     echo "<td>".$curAddress."</td>\n";
+    echo "<td>".$ow->read("/".$curAddress."/temperature")."</td>";
     echo "<form name=\"form".$i."\" action=\"save_alias.php\" method=\"get\">\n";
     echo "<input type=\"hidden\" name=\"address\" value=\"".$curAddress."\" />\n";
     echo "<td><input name=\"alias\" type=\"text\" value=\"".$ow->read("/".$curAddress."/alias")."\" /></td>\n";

@@ -20,6 +20,7 @@ dFile = open('/etc/owfs-etm/discovered','w') #discovered file, open for writing
 for line in lineList:
     if(line.startswith('#') == True):
         continue
+    #append each line to the "new file" so as not to destroy the data
     newFile.append(line)
     dAddresses.append(line.split(':')[0])
 
@@ -38,6 +39,7 @@ for directory in ownet.Sensor('/','localhost',4304).sensorList():
             if(address == a):
                 seen = True
                 break
+        #if the address has not been already discovered, add it to newAddresses
         if(seen == False):
             newAddresses.append(address)
 

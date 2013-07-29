@@ -1,5 +1,5 @@
 <?php
 $aliasFile = "/settings/alias/list";
-$externalAliasFile = "/etc/owfs-etm/aliases";
+$externalAliasFile = "/etc/owtm/aliases";
 $adapter = "localhost:4304";
 ?>

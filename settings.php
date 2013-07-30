@@ -1,6 +1,4 @@
 <?php
-$aliasFile = "/settings/alias/list";
-$externalAliasFile = "/etc/owtg/aliases";
-$discoveredFile = "/etc/owtg/discovered";
+$sensorsFile = "/etc/owtg/sensors";
 $adapter = "localhost:4304";
 ?>

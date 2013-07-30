@@ -36,24 +36,24 @@ function isAddressOnline($address){
 }
 
 function getSensors(){
-    global $discoveredFile;
+    global $sensorsFile;
     global $ow;
     
     $sensorArray = array();
-    $fileArray = file($discoveredFile,FILE_IGNORE_NEW_LINES);
+    $fileArray = file($sensorsFile,FILE_IGNORE_NEW_LINES);
     foreach($fileArray as $line){
         if($line[0] == '#')
             continue;
         $discoveredArray = explode(":",$line);
         $newSensor = new Sensor();
-        $newSensor->address = $discoveredArray[0];
-        $newSensor->timestamp = intval($discoveredArray[1]);
-        if($discoveredArray[2] == 'y')
+        $newSensor->alias = $discoveredArray[0];
+        $newSensor->address = $discoveredArray[1];
+        $newSensor->timestamp = intval($discoveredArray[2]);
+        if($discoveredArray[3] == 'y')
             $newSensor->graph = True;
         else
             $newSensor->graph = False;
         $newSensor->online = isAddressOnline($newSensor->address);
-        $newSensor->alias = $ow->read("/".$newSensor->address."/alias");
         
         $sensorArray[] = $newSensor;
     }
@@ -81,7 +81,7 @@ foreach(getSensors() as $curSensor){
     echo "<td>".$online."</td>\n";
     echo "<form name=\"form".$i."\" action=\"update_sensor.php\" method=\"get\">\n";
     echo "<input type=\"hidden\" name=\"address\" value=\"".$curSensor->address."\" />\n";
-    echo "<td><input name=\"alias\" type=\"text\" value=\"".$ow->read("/".$curSensor->address."/alias")."\"></td>\n";
+    echo "<td><input name=\"alias\" type=\"text\" value=\"".$curSensor->alias."\"></td>\n";
     echo "<td><input name=\"graph\" type=\"checkbox\" value=\"graph\" ".$checked."></td>\n";
     echo "<td><input type=\"submit\" value=\"Modify\"></td></form>\n";
     echo "</tr>\n";

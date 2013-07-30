@@ -3,7 +3,8 @@ from time import localtime, mktime
 
 ownet.init('localhost:4304')
 
-dFile = open('/etc/owfs-etm/discovered','r') #discovered file, open for reading
+dFilename = '/etc/owtg/discovered'
+dFile = open(dFilename,'r') #discovered file, open for reading
 dAddresses = [] #already discovered addresses
 newAddresses = [] #new addresses found during this run
 newFile = [] #array of lines to write out to file
@@ -15,7 +16,7 @@ newFile.append('#[address]:[timestamp]:[graph(y/n)]\n')
 lineList = dFile.readlines()
 
 dFile.close()
-dFile = open('/etc/owfs-etm/discovered','w') #discovered file, open for writing
+dFile = open(dFilename,'w') #discovered file, open for writing
 
 for line in lineList:
     if(line.startswith('#') == True):

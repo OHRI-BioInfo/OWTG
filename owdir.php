@@ -63,7 +63,7 @@ function getSensors(){
 echo "<table>\n";
 $i=1;
 echo "<th>Device Address</th><th>Discovery Date</th><th>Temperature</th><th>Online</th>";
-echo "<th>Alias</th><th>Graph?</th><th>Modify</th>";
+echo "<th>Alias</th><th>Graph?</th><th>Modify</th>\n";
 foreach(getSensors() as $curSensor){
     $online = 'No'; #String to describe online status
     $checked = ''; #If this is set to "checked", then the checkbox will be checked
@@ -82,12 +82,12 @@ foreach(getSensors() as $curSensor){
     echo "<form name=\"form".$i."\" action=\"update_sensor.php\" method=\"get\">\n";
     echo "<input type=\"hidden\" name=\"address\" value=\"".$curSensor->address."\" />\n";
     echo "<td><input name=\"alias\" type=\"text\" value=\"".$ow->read("/".$curSensor->address."/alias")."\"></td>\n";
-    echo "<td><input name=\"graph\" type=\"checkbox\" value=\"graph\" ".$checked."></td>";
+    echo "<td><input name=\"graph\" type=\"checkbox\" value=\"graph\" ".$checked."></td>\n";
     echo "<td><input type=\"submit\" value=\"Modify\"></td></form>\n";
     echo "</tr>\n";
     $i++;
 }
-echo "</table>";
+echo "</table>\n";
 
 unset($ow);
 

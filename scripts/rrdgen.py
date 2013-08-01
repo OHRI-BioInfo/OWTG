@@ -1,6 +1,6 @@
 import rrdtool
 import os.path
-import math
+from math import ceil
 import shutil
 
 #BEGIN - You may change these values
@@ -41,6 +41,8 @@ if step%60 != 0:
     print('!!WARNING!! Step is not a multiple of 60. This may cause undesired behaviour.')
 
 def createDB():
+    global math
+    
     minutes = int(round(step/60.0)) #Minutes represented by the step which is in seconds
     daySteps = 4*minutes
     dayRows = ceil(1440/daySteps) #1440 - number of minutes in a 24-hour day (24h*60m)
@@ -63,10 +65,9 @@ def createDB():
     for i in range(0,initialDSCount):
         dataSources.append('DS:unclaimed'+str(i)+':GAUGE:'+str(step)+':U:U')
     
-    arguments = [dbPath,
-                '--step',str(step),
-                dataSources, archives]
-    rrdtool.create(arguments)
+    rrdtool.create( dbPath, 
+                    '--step', str(step),
+                    dataSources, archives)
                 
 if os.path.exists(dbPath):
     print('The database already exists. If you continue, it will be overwritten. ')
@@ -84,6 +85,6 @@ if os.path.exists(dbPath):
             continue
         break
     if not noBackup:
-        copy2(dbPath,dbPath+'~')
+        shutil.copy2(dbPath,dbPath+'~')
 
 createDB()

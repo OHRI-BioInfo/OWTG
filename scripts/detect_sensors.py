@@ -20,18 +20,18 @@ sFile = open(sFilename,'w') #sensors file, open for writing
 
 for line in lineList:
     #ignore comments (lines beginning with #)
-    if(line.startswith('#') == True):
+    if line.startswith('#'):
         continue
     #append each line to the "new file" so as not to destroy the data
     newFile.append(line)
-    if(line):
+    if line:
         dAddresses.append(line.split(':')[1])
 
 for directory in ownet.Sensor('/','localhost',4304).sensorList():
     seen = False
     address = None
     #exclude "simultaneous" as it has a temperature file but is not a sensor
-    if(directory == ownet.Sensor('/simultaneous','localhost',4304)):
+    if directory == ownet.Sensor('/simultaneous','localhost',4304):
         continue
 
     #If the directory contains "temperature", it is a sensor
@@ -40,11 +40,11 @@ for directory in ownet.Sensor('/','localhost',4304).sensorList():
         address = directory.address
         for a in dAddresses:
             #check against every discovered addresss
-            if(address == a):
+            if address == a:
                 seen = True
                 break
         #if the address has not been already discovered, add it to newAddresses
-        if(seen == False):
+        if not seen:
             newAddresses.append(address)
 
 for a in newAddresses:

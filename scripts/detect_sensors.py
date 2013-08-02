@@ -1,5 +1,5 @@
 import ownet
-from time import gmtime, mktime
+from time import localtime, mktime
 
 ownet.init('localhost:4304')
 
@@ -48,7 +48,7 @@ for directory in ownet.Sensor('/','localhost',4304).sensorList():
 
 for a in newAddresses:
     #Build a string in the form of "[alias(empty)]:[address]:[timestamp]:[graph(y/n)]\n"
-    sensorLine = ':' + a + ':' + str(mktime(gmtime())).split('.')[0] + ':n\n'
+    sensorLine = ':' + a + ':' + str(mktime(localtime())).split('.')[0] + ':n\n'
     #Append it to the new file line array
     newFile.append(sensorLine)
 

@@ -76,7 +76,7 @@ foreach(getSensors() as $curSensor){
     else
         echo "<tr>\n";
     echo "<td>".$curSensor->address."</td>\n";
-    echo "<td>".date("d M Y H:i:s",$curSensor->timestamp)."</td>\n";
+    echo "<td>".date("d M Y H:i:s T",$curSensor->timestamp)."</td>\n";
     echo "<td>".$ow->read("/".$curSensor->address."/temperature")."</td>\n";
     echo "<td>".$online."</td>\n";
     echo "<form name=\"form".$i."\" action=\"update_sensor.php\" method=\"get\">\n";

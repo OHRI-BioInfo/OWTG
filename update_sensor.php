@@ -6,6 +6,14 @@ $alias = $_GET["alias"];
 $address = $_GET["address"];
 $graph = isset($_GET["graph"]);
 
+if(strpos($alias,':') !== false){
+    echo '<meta http-equiv="refresh" content="3; url=/owdir.php">';
+    echo 'Alias contains invalid character \':\'<br>';
+    echo '<a href="/owdir.php">Click here</a> if you are not redirected in 3 seconds.';
+    exit(1);
+}else{
+    header("location: /owdir.php");
+}
 $fileArray = file($sensorsFile,FILE_IGNORE_NEW_LINES);
 
 foreach($fileArray as &$line){
@@ -25,6 +33,5 @@ $sFile = fopen($sensorsFile,'w');
 
 foreach($fileArray as $line)
     fwrite($sFile,$line."\n");
-
-header("location: /owdir.php");
+fclose($sFile);
 ?>

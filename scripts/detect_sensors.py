@@ -62,7 +62,7 @@ for a in gAddresses:
     if not claimed:
         rrdtool.tune(dbFilename, '--data-source-rename', 'unclaimed_'+firstUnclaimed+':'+a)
 
-newFile.sort();
+newFile.sort()
 sFile = open(sFilename,'w') #sensors file, open for writing
 sFile.writelines(newFile)
 sFile.close()

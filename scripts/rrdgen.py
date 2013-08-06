@@ -1,5 +1,6 @@
 import rrdtool
 import os.path
+from owtg import dbFilename
 from math import ceil
 import shutil
 
@@ -31,8 +32,6 @@ noBackup = False;
 
 #END
 
-dbPath = '/etc/owtg/database.rrd'
-
 if step<60:
     print('ERROR: Step cannot be less than 60')
     exit(0)
@@ -63,13 +62,13 @@ def createDB():
                 RRAString+str(archiveSteps)+':'+str(archiveRows)]
                 
     for i in range(0,initialDSCount):
-        dataSources.append('DS:unclaimed'+str(i)+':GAUGE:'+str(step)+':U:U')
+        dataSources.append('DS:unclaimed_'+str(i)+':GAUGE:'+str(step)+':U:U')
     
-    rrdtool.create( dbPath, 
+    rrdtool.create(dbFilename, 
                     '--step', str(step),
                     dataSources, archives)
                 
-if os.path.exists(dbPath):
+if os.path.exists(dbFilename):
     print('The database already exists. If you continue, it will be overwritten. ')
     if not noBackup:
         print('A backup will be made (this will erase any existing backup).')
@@ -85,6 +84,6 @@ if os.path.exists(dbPath):
             continue
         break
     if not noBackup:
-        shutil.copy2(dbPath,dbPath+'~')
+        shutil.copy2(dbFilename,dbFilename+'~')
 
 createDB()

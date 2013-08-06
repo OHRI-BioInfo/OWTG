@@ -45,7 +45,7 @@ for directory in ownet.Sensor('/','localhost',4304).sensorList():
 
 for a in newAddresses:
     #Build a string in the form of "[alias(empty)]:[address]:[timestamp]:[graph(y/n)]\n"
-    sensorLine = ':' + a + ':' + str(mktime(localtime())).split('.')[0] + ':n\n'
+    sensorLine = ':' + a + ':' + str(int(mktime(localtime()))) + ':n\n'
     #Append it to the new file line array
     newFile.append(sensorLine)
     

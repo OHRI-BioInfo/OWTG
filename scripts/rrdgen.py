@@ -43,7 +43,7 @@ if step%60 != 0:
 
 #Input verification loop
 while True:
-    choice = raw_input('\nWhich database would you like to generate (archive/graphing/both)?')
+    choice = raw_input('\nWhich database would you like to generate (archive/graphing/both)? ')
     if choice == 'archive':
         dbFilenames = [adbFilename]
         break
@@ -59,6 +59,7 @@ while True:
 
 def createDB(dbType):
     global math
+    dbFilename = ''
     
     minutes = int(round(step/60.0)) #Minutes represented by the step which is in seconds
     daySteps = 4*minutes
@@ -75,13 +76,13 @@ def createDB(dbType):
     RRAString = 'RRA:AVERAGE:0.5:'
     if dbType == 'archive':
         archives = [RRAString+str(archiveSteps)+':'+str(archiveRows)]
-        dbFilename = 'archive.rrd'
+        dbFilename = adbFilename
     elif dbType == 'graphing':
         archives = [RRAString+str(daySteps)+':'+str(dayRows),
                     RRAString+str(weekSteps)+':'+str(weekRows),
                     RRAString+str(monthSteps)+':'+str(monthRows),
                     RRAString+str(yearSteps)+':'+str(yearRows)]
-        dbFilename = 'graphing.rrd'
+        dbFilename = gdbFilename
                 
     for i in range(0,initialDSCount):
         dataSources.append('DS:unclaimed_'+str(i)+':GAUGE:'+str(step)+':U:U')
@@ -109,6 +110,7 @@ for dbFilename in dbFilenames:
         if not noBackup:
             shutil.copy2(dbFilename,dbFilename+'~')
             os.chmod(dbFilename+'~',0666)
+            
     if dbFilename == adbFilename:
         createDB('archive')
     elif dbFilename == gdbFilename:

@@ -24,4 +24,5 @@ for sensor in sensorTemps:
     values += sensor[1]+':'
 values = values.rstrip(':')
 
-rrdtool.update(dbFilename,'-t',template,values)
+rrdtool.update(adbFilename,'-t',template,values)
+rrdtool.update(gdbFilename,'-t',template,values)

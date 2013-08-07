@@ -53,14 +53,15 @@ for a in gAddresses:
     claimed = False #Has it been claimed in the RRD?
     foundUnclaimed = False #Has an unclaimed DS been found?
     firstUnclaimed = '-1' #ID of the first seen unclaimed DS
-    for dsName in rrdtool.fetch(dbFilename, 'AVERAGE')[1]:
+    for dsName in rrdtool.fetch(adbFilename, 'AVERAGE')[1]:
         if dsName == a:
             claimed = True
         if dsName.split('_')[0] == 'unclaimed' and not foundUnclaimed:
             foundUnclaimed = True
             firstUnclaimed = dsName.split('_')[1]
     if not claimed:
-        rrdtool.tune(dbFilename, '--data-source-rename', 'unclaimed_'+firstUnclaimed+':'+a)
+        rrdtool.tune(adbFilename, '--data-source-rename', 'unclaimed_'+firstUnclaimed+':'+a)
+        rrdtool.tune(gdbFilename, '--data-source-rename', 'unclaimed_'+firstUnclaimed+':'+a)
 
 newFile.sort()
 sFile = open(sFilename,'w') #sensors file, open for writing

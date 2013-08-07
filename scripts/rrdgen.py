@@ -1,6 +1,6 @@
 import rrdtool
 import os
-from owtg import dbFilename
+from owtg import adbFilename, gdbFilename
 from math import ceil
 import shutil
 
@@ -32,6 +32,8 @@ noBackup = False;
 
 #END
 
+dbFilenames = ''
+
 if step<60:
     print('ERROR: Step cannot be less than 60')
     exit(0)
@@ -39,7 +41,23 @@ if step<60:
 if step%60 != 0:
     print('!!WARNING!! Step is not a multiple of 60. This may cause undesired behaviour.')
 
-def createDB():
+#Input verification loop
+while True:
+    choice = raw_input('\nWhich database would you like to generate (archive/graphing/both)?')
+    if choice == 'archive':
+        dbFilenames = [adbFilename]
+        break
+    elif choice == 'both':
+        dbFilenames = [adbFilename,gdbFilename]
+        break
+    elif choice != 'graphing':
+        print('Invalid choice. Please try again.')
+        continue
+    dbFilenames = [gdbFilename]
+    break
+    
+
+def createDB(dbType):
     global math
     
     minutes = int(round(step/60.0)) #Minutes represented by the step which is in seconds
@@ -55,11 +73,15 @@ def createDB():
     archiveRows = ceil(525949*years/archiveSteps)
     dataSources = []
     RRAString = 'RRA:AVERAGE:0.5:'
-    archives = [RRAString+str(daySteps)+':'+str(dayRows),
-                RRAString+str(weekSteps)+':'+str(weekRows),
-                RRAString+str(monthSteps)+':'+str(monthRows),
-                RRAString+str(yearSteps)+':'+str(dayRows),
-                RRAString+str(archiveSteps)+':'+str(archiveRows)]
+    if dbType == 'archive':
+        archives = [RRAString+str(archiveSteps)+':'+str(archiveRows)]
+        dbFilename = 'archive.rrd'
+    elif dbType == 'graphing':
+        archives = [RRAString+str(daySteps)+':'+str(dayRows),
+                    RRAString+str(weekSteps)+':'+str(weekRows),
+                    RRAString+str(monthSteps)+':'+str(monthRows),
+                    RRAString+str(yearSteps)+':'+str(yearRows)]
+        dbFilename = 'graphing.rrd'
                 
     for i in range(0,initialDSCount):
         dataSources.append('DS:unclaimed_'+str(i)+':GAUGE:'+str(step)+':U:U')
@@ -67,25 +89,28 @@ def createDB():
     rrdtool.create(dbFilename, 
                     '--step', str(step),
                     dataSources, archives)
-                
-if os.path.exists(dbFilename):
-    print('The database already exists. If you continue, it will be overwritten. ')
-    if not noBackup:
-        print('A backup will be made (this will erase any existing backup).')
-    else:
-        print('A backup will not be made and you WILL lose data.')
-    #Input verification loop
-    while True:
-        choice = raw_input('\nDo you want to continue (yes/no)? ')
-        if choice == 'no':
-            exit(0)
-        elif choice != 'yes':
-            print('Invalid choice. Please try again.')
-            continue
-        break
-    if not noBackup:
-        shutil.copy2(dbFilename,dbFilename+'~')
-        os.chmod(dbFilename+'~',0666)
 
-createDB()
-os.chmod(dbFilename,0666)
+for dbFilename in dbFilenames:
+    if os.path.exists(dbFilename):
+        print('The database already exists. If you continue, it will be overwritten. ')
+        if not noBackup:
+            print('A backup will be made (this will erase any existing backup).')
+        else:
+            print('A backup will not be made and you WILL lose data.')
+        #Input verification loop
+        while True:
+            choice = raw_input('\nDo you want to continue (yes/no)? ')
+            if choice == 'no':
+                exit(0)
+            elif choice != 'yes':
+                print('Invalid choice. Please try again.')
+                continue
+            break
+        if not noBackup:
+            shutil.copy2(dbFilename,dbFilename+'~')
+            os.chmod(dbFilename+'~',0666)
+    if dbFilename == adbFilename:
+        createDB('archive')
+    elif dbFilename == gdbFilename:
+        createDB('graphing')
+    os.chmod(dbFilename,0666)

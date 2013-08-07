@@ -1,5 +1,5 @@
 import rrdtool
-import os.path
+import os
 from owtg import dbFilename
 from math import ceil
 import shutil
@@ -85,5 +85,7 @@ if os.path.exists(dbFilename):
         break
     if not noBackup:
         shutil.copy2(dbFilename,dbFilename+'~')
+        os.chmod(dbFilename+'~',0666)
 
 createDB()
+os.chmod(dbFilename,0666)

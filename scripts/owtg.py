@@ -1,4 +1,4 @@
-sFilename = '/opt/etc/sensors'
+sFilename = '/opt/owtg/etc/sensors'
 dbFilename = '/opt/owtg/etc/database.rrd'
 
 def getSensors(graphOnly=False):

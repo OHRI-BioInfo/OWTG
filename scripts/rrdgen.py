@@ -93,7 +93,7 @@ def createDB(dbType):
 
 for dbFilename in dbFilenames:
     if os.path.exists(dbFilename):
-        print('The database already exists. If you continue, it will be overwritten. ')
+        print('The database ' + dbFilename + ' already exists. If you continue, it will be overwritten. ')
         if not noBackup:
             print('A backup will be made (this will erase any existing backup).')
         else:

@@ -1,5 +1,5 @@
-sFilename = '/etc/owtg/sensors'
-dbFilename = '/etc/owtg/database.rrd'
+sFilename = '/opt/etc/sensors'
+dbFilename = '/opt/owtg/etc/database.rrd'
 
 def getSensors(graphOnly=False):
     dAddresses = [] #already discovered addresses

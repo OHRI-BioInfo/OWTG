@@ -17,6 +17,8 @@ if(strpos($alias,':') !== false){
 $fileArray = file($sensorsFile,FILE_IGNORE_NEW_LINES);
 
 foreach($fileArray as &$line){
+    if($line[0] == '#')
+        continue;
     $values = explode(':',$line);
     if($values[1] == $address){
         $values[0] = $alias;

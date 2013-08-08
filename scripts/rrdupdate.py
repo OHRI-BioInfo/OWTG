@@ -6,7 +6,11 @@ from owtg import *
 ownet.init('localhost:4304')
 
 currentTime = time.localtime()
-currentMinute = int(time.mktime(currentTime)-currentTime.tm_sec)
+currentHalfMinute = 0
+if int(currentTime.tm_sec-30) < 0: 
+    currentHalfMinute = int(time.mktime(currentTime)-currentTime.tm_sec)
+else:
+    currentHalfMinute = int(time.mktime(currentTime)-(currentTime.tm_sec-30))
 
 gAddresses = getSensors(True) #Addresses to graph
 sensorTemps = [] #Array of tuples in this format: ([address],[temperature])
@@ -19,7 +23,7 @@ for sensor in sensorTemps:
     template += sensor[0]+':'
 template = template.rstrip(':')
 
-values = str(currentMinute)+':'
+values = str(currentHalfMinute)+':'
 for sensor in sensorTemps:
     values += sensor[1]+':'
 values = values.rstrip(':')

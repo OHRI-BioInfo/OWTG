@@ -50,6 +50,10 @@ def createDB(dbType):
     dbFilename = ''
     
     minutes = round(step/60.0,1) #Minutes represented by the step which is in seconds
+    hourSteps = 1
+    hourRows = ceil(60/minutes)
+    hoursSteps = 1
+    hoursRows = ceil(180/minutes)
     daySteps = 4/minutes
     dayRows = ceil(1440/4) #1440 - number of minutes in a 24-hour day (24h*60m)
     weekSteps = 30/minutes
@@ -66,7 +70,9 @@ def createDB(dbType):
         archives = [RRAString+str(archiveSteps)+':'+str(archiveRows)]
         dbFilename = adbFilename
     elif dbType == 'graphing':
-        archives = [RRAString+str(daySteps)+':'+str(dayRows),
+        archives = [RRAString+str(hourSteps)+':'+str(hourRows),
+                    RRAString+str(hoursSteps)+':'+str(hoursRows),
+                    RRAString+str(daySteps)+':'+str(dayRows),
                     RRAString+str(weekSteps)+':'+str(weekRows),
                     RRAString+str(monthSteps)+':'+str(monthRows),
                     RRAString+str(yearSteps)+':'+str(yearRows)]

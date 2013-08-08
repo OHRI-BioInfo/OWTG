@@ -32,7 +32,7 @@ noBackup = False;
 
 #END
 
-dbFilenames = ''
+dbFilenames = [adbFilename,gdbFilename]
 
 if step<60:
     print('ERROR: Step cannot be less than 60')
@@ -40,22 +40,6 @@ if step<60:
 
 if step%60 != 0:
     print('!!WARNING!! Step is not a multiple of 60. This may cause undesired behaviour.')
-
-#Input verification loop
-while True:
-    choice = raw_input('\nWhich database would you like to generate (archive/graphing/both)? ')
-    if choice == 'archive':
-        dbFilenames = [adbFilename]
-        break
-    elif choice == 'both':
-        dbFilenames = [adbFilename,gdbFilename]
-        break
-    elif choice != 'graphing':
-        print('Invalid choice. Please try again.')
-        continue
-    dbFilenames = [gdbFilename]
-    break
-    
 
 def createDB(dbType):
     global math

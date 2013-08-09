@@ -16,7 +16,7 @@ initialDSCount = 20
 #automatically, but it is possible to manually request graphs of any time period that
 #you have data for via the web interface.
 #Default: 1
-years = 5
+years = 1
 
 #The interval, in seconds, that the RRD file will be updated with values.
 #For correct operation this MUST be a multiple of 60 (as cron only operates in minutes)
@@ -28,7 +28,11 @@ step = 30
 
 #Change this to True if you want to suppress backup creation (not recommended)
 #Default: False
-noBackup = False;
+noBackup = False
+
+#The width, in pixels, of the canvas of the graphs that will be generated with this RRD.
+#Default: 400
+width = 400
 
 #END
 
@@ -45,6 +49,9 @@ if step<30:
 if step%30 != 0:
     print('!!WARNING!! Step is not a multiple of 30. This may cause undesired behaviour.')
 
+currentTime = time.localtime()
+currentMinute = int(time.mktime(currentTime)-currentTime.tm_sec)
+
 def createDB(dbType):
     global math
     dbFilename = ''
@@ -54,16 +61,16 @@ def createDB(dbType):
     hourRows = ceil(60/minutes)
     hoursSteps = 1
     hoursRows = ceil(180/minutes)
-    daySteps = 4/minutes
-    dayRows = ceil(1440/4) #1440 - number of minutes in a 24-hour day (24h*60m)
-    weekSteps = 30/minutes
-    weekRows = ceil(10080/30) #10080 - number of minutes in a 7-day week of 24-hour days (7d*24h*60m)
-    monthSteps = 120/minutes
-    monthRows = ceil(44640/120) #44640 - number of minutes in a 31-day month of 24-hour days (31d*24h*60m)
-    yearSteps = 1440/minutes
-    yearRows = ceil(525949/1440) #525949 - approx number of minutes in an averaged 365.2425-day year (Google)
+    daySteps = ceil(1440.0/width/minutes) #1440 - number of minutes in a 24-hour day (24h*60m)
+    dayRows = ceil(1440.0/(1440.0/width))
+    weekSteps = ceil(10080.0/width/minutes) #10080 - number of minutes in a 7-day week of 24-hour days (7d*24h*60m)
+    weekRows = ceil(10080.0/(10080.0/width))
+    monthSteps = ceil(44640.0/width/minutes) #44640 - number of minutes in a 31-day month of 24-hour days (31d*24h*60m)
+    monthRows = ceil(44640.0/(44640.0/width))
+    yearSteps = ceil(525949.0/width/minutes) #525949 - approx number of minutes in an averaged 365.2425-day year (Google)
+    yearRows = ceil(525949.0/(525949.0/width))
     archiveSteps = 1
-    archiveRows = ceil(525949*(1/minutes)*years)
+    archiveRows = ceil(525949.0*(1/minutes)*years)
     dataSources = []
     RRAString = 'RRA:AVERAGE:0.5:'
     if dbType == 'archive':
@@ -83,7 +90,8 @@ def createDB(dbType):
     
     rrdtool.create(dbFilename, 
                     '--step', str(step),
-                    dataSources, archives)
+                    dataSources, archives,
+                    '--start',str(currentMinute))
 
 for dbFilename in dbFilenames:
     if os.path.exists(dbFilename):

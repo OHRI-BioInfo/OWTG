@@ -32,6 +32,7 @@ step = 30
 noBackup = False
 
 #The width, in pixels, of the canvas of the graphs that will be generated with this RRD.
+#If you change this, you must change width in rrdgraph.py to the same value.
 #Default: 400
 width = 400
 

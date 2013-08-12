@@ -1,4 +1,5 @@
 from owtg import *
+from string import replace
 import rrdtool
 
 #This is the width of the graph canvas, where the data is displayed.
@@ -13,6 +14,11 @@ graphsPath = '/var/www/graphs/'
 
 gAddresses = getSensors(True)
 
+def replaceArguments(arguments,time,title):
+    arguments = [replace(s,'::::',time) for s in arguments]
+    arguments = [replace(s,'::-::',title) for s in arguments]
+    return arguments
+
 for address in gAddresses:
     alias = getAlias(address)
     #Not implemented yet:
@@ -26,26 +32,9 @@ for address in gAddresses:
     'DEF:'+address+'=/opt/owtg/etc/graphing.rrd:'+address+':AVERAGE',\
     'LINE:'+address+'#1A50BC:'+alias]
     
-    arguments = [s.replace('::::','1h') for s in arguments]
-    arguments = [s.replace('::-::','Past hour') for s in arguments]
-    rrdtool.graph(arguments)
-    
-    arguments = [s.replace('::::','3h') for s in arguments]
-    arguments = [s.replace('::-::','Past 3 hours') for s in arguments]
-    rrdtool.graph(arguments)
-    
-    arguments = [s.replace('::::','1d') for s in arguments]
-    arguments = [s.replace('::-::','Past day') for s in arguments]
-    rrdtool.graph(arguments)
-    
-    arguments = [s.replace('::::','1w') for s in arguments]
-    arguments = [s.replace('::-::','Past week') for s in arguments]
-    rrdtool.graph(arguments)
-    
-    arguments = [s.replace('::::','1month') for s in arguments]
-    arguments = [s.replace('::-::','Past month') for s in arguments]
-    rrdtool.graph(arguments)
-    
-    arguments = [s.replace('::::','1y') for s in arguments]
-    arguments = [s.replace('::-::','Past year') for s in arguments]
-    rrdtool.graph(arguments)
+    rrdtool.graph(replaceArguments(arguments,'1h','Past hour'))
+    rrdtool.graph(replaceArguments(arguments,'3h','Past 3 hours'))
+    rrdtool.graph(replaceArguments(arguments,'1d','Past day'))
+    rrdtool.graph(replaceArguments(arguments,'1w','Past week'))
+    rrdtool.graph(replaceArguments(arguments,'1m','Past month'))
+    rrdtool.graph(replaceArguments(arguments,'1y','Past year'))

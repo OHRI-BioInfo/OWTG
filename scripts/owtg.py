@@ -22,7 +22,7 @@ def getSensors(graphOnly=False):
     dAddresses = [] #already discovered addresses
     gAddresses = [] #Addresses with "graph" turned on
     
-    lineList = getLines(sFile)
+    lineList = getLines(sFilename)
 
     for line in lineList:
         if line:
@@ -34,7 +34,7 @@ def getSensors(graphOnly=False):
     return dAddresses
     
 def getAlias(address):
-    lineList = getLines(sFile)
+    lineList = getLines(sFilename)
     
     for line in lineList:
         if line:

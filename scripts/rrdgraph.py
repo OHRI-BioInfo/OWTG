@@ -22,8 +22,8 @@ for address in gAddresses:
     #:::: is a placeholder for time, ::-:: is a placeholder for title
     #Colons are used because the user isn't allowed to enter them in the alias 
     arguments = [graphsPath+address+'-::::'+'.png','--end','now','--start',\
-    'end-::::','--title','::-::','--width',width,\
-    'DEF:sensor1=/opt/owtg/etc/graphing.rrd:'+address+':AVERAGE',\
+    'end-::::','--title','::-::','--width',str(width),\
+    'DEF:'+address+'=/opt/owtg/etc/graphing.rrd:'+address+':AVERAGE',\
     'LINE:'+address+'#1A50BC:'+alias]
     
     arguments = [s.replace('::::','1h') for s in arguments]

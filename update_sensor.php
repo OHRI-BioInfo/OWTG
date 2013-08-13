@@ -32,6 +32,13 @@ if(preg_match("/[^0-9.]/",$maxAlarm) == 1){
     echo "[".$address."][Warning] Maximum Alarm contained invalid characters which have been stripped.<br>\n";
     echo "[".$address."][Warning] Maximum Alarm set to ".$maxAlarm."<br>";
 }
+if(floatval($maxAlarm) <= floatval($minAlarm)){
+    $error = true;
+    #error - max must be greater than min
+    echo $redirect;
+    exit(1);
+}
+
 if(!$error){
     header("location: /owdir.php");
 }else{

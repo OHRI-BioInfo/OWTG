@@ -75,7 +75,7 @@ foreach(getSensors() as $curSensor){
         echo "<tr style=\"background-color:lightgrey;\">\n";
     else
         echo "<tr>\n";
-    echo "<td>".$curSensor->address."</td>\n";
+    echo "<td><a href=\"showgraphs.php?address=".$curSensor->address."\">".$curSensor->address."</a></td>\n";
     echo "<td>".date("d M Y H:i:s T",$curSensor->timestamp)."</td>\n";
     echo "<td>".$ow->read("/".$curSensor->address."/temperature")."</td>\n";
     echo "<td>".$online."</td>\n";

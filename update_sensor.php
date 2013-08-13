@@ -5,13 +5,35 @@ include "/opt/owfs/share/php/OWNet/ownet.php";
 $alias = $_GET["alias"];
 $address = $_GET["address"];
 $graph = isset($_GET["graph"]);
+$minAlarm = $_GET["minAlarm"];
+$maxAlarm = $_GET["maxAlarm"];
+
+$error = False;
+$errorStuff ="<meta http-equiv=\"refresh\" content=\"3; url=/owdir.php\">\n
+<a href=\"/owdir.php\">Click here</a> if you are not redirected in 3 seconds.";
+
 
 if(strpos($alias,':') !== false){
-    echo '<meta http-equiv="refresh" content="3; url=/owdir.php">';
-    echo 'Alias contains invalid character \':\'<br>';
-    echo '<a href="/owdir.php">Click here</a> if you are not redirected in 3 seconds.';
+    $error = True;
+    echo '[".$address."][Error] Alias contains invalid character \':\'<br>';
+    echo $errorStuff;
     exit(1);
-}else{
+}
+if(preg_match('[^0-9.]',$minAlarm)){
+    $minAlarm = preg_replace('[^0-9.]','',$minAlarm);
+    $error = True;
+    echo "[".$address."][Warning] Minimum Alarm contained invalid characters which have been stripped.<br>\n";
+    echo "[".$address."][Warning] Minimum Alarm set to ".$minAlarm;
+    echo $errorStuff;
+}
+if(preg_match('[^0-9.]',$maxAlarm)){
+    $maxAlarm = preg_replace('[^0-9.]','',$maxAlarm);
+    $error = True;
+    echo "[".$address."][Warning] Maximum Alarm contained invalid characters which have been stripped.<br>\n";
+    echo "[".$address."][Warning] Maximum Alarm set to ".$maxAlarm;
+    echo $errorStuff;
+}
+if(!$error){
     header("location: /owdir.php");
 }
 $fileArray = file($sensorsFile,FILE_IGNORE_NEW_LINES);
@@ -26,7 +48,9 @@ foreach($fileArray as &$line){
             $values[3] = 'y';
         else
             $values[3] = 'n';
-        $line = $values[0].':'.$values[1].':'.$values[2].':'.$values[3];
+        $values[4] = $minAlarm;
+        $values[5] = $maxAlarm;
+        $line = $values[0].':'.$values[1].':'.$values[2].':'.$values[3].':'.$values[4].':'.$values[5];
     }
 }
 

@@ -8,6 +8,16 @@
         border: 1px solid black;
         padding: 4px;
     }
+    input.alarms{
+        width: 4em;
+        margin-right:auto;
+        margin-left:auto;
+        text-align:center;
+        display:block;
+    }
+    input.alias{
+        width: 8.5em;
+    }
     </style>
     <meta http-equiv="refresh" content="16">
 </head>
@@ -53,6 +63,8 @@ function getSensors(){
             $newSensor->graph = True;
         else
             $newSensor->graph = False;
+        $newSensor->minAlarm = floatval($discoveredArray[4]);
+        $newSensor->maxAlarm = floatval($discoveredArray[5]);
         $newSensor->online = isAddressOnline($newSensor->address);
         
         $sensorArray[] = $newSensor;
@@ -63,7 +75,7 @@ function getSensors(){
 echo "<table>\n";
 $i=1;
 echo "<th>Device Address</th><th>Discovery Date</th><th>Temperature</th><th>Online</th>";
-echo "<th>Alias</th><th>Graph?</th><th>Modify</th>\n";
+echo "<th>Alias</th><th>Min. Alarm</th><th>Max. Alarm</th><th>Graph?</th><th>Modify</th>\n";
 foreach(getSensors() as $curSensor){
     $online = 'No'; #String to describe online status
     $checked = ''; #If this is set to "checked", then the checkbox will be checked
@@ -81,7 +93,9 @@ foreach(getSensors() as $curSensor){
     echo "<td>".$online."</td>\n";
     echo "<form name=\"form".$i."\" action=\"update_sensor.php\" method=\"get\">\n";
     echo "<input type=\"hidden\" name=\"address\" value=\"".$curSensor->address."\" />\n";
-    echo "<td><input name=\"alias\" type=\"text\" value=\"".$curSensor->alias."\"></td>\n";
+    echo "<td><input name=\"alias\" type=\"text\" value=\"".$curSensor->alias."\" class=\"alias\"></td>\n";
+    echo "<td><input name=\"minAlarm\" type=\"number\" value=\"".$curSensor->minAlarm."\" class=\"alarms\"></td>";
+    echo "<td><input name=\"maxAlarm\" type=\"number\" value=\"".$curSensor->maxAlarm."\" class=\"alarms\"></td>";
     echo "<td><input name=\"graph\" type=\"checkbox\" value=\"graph\" ".$checked."></td>\n";
     echo "<td><input type=\"submit\" value=\"Modify\"></td></form>\n";
     echo "</tr>\n";

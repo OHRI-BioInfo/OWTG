@@ -5,8 +5,8 @@ from time import localtime, mktime
 
 ownet.init('localhost:4304')
 
-dAddresses = getSensors() #already discovered addresses
-gAddresses = getSensors(True) #Addresses with "graph" turned on
+dAddresses = [s.address for s in getSensors()] #already discovered addresses
+gAddresses = [s.address for s in getSensors() if s.graph == True] #Addresses with "graph" turned on
 newAddresses = [] #new addresses found during this run
 newFile = [] #array of lines to write out to file
 

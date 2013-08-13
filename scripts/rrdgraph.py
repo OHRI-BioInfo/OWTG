@@ -12,7 +12,7 @@ width = 400
 #Default: /var/www/graphs
 graphsPath = '/var/www/graphs/'
 
-gSensors = [s.address for s in getSensors() if s.graph == True]
+gSensors = [s for s in getSensors() if s.graph == True]
 
 def replaceArguments(arguments,time,title):
     arguments = [replace(s,'::::',time) for s in arguments]
@@ -30,9 +30,9 @@ for sensor in gSensors:
     arguments = [graphsPath+address+'-::::'+'.png','--end','now','--start',\
     'end-::::','--title','::-::','--width',str(width),\
     'DEF:'+address+'=/opt/owtg/etc/graphing.rrd:'+address+':AVERAGE',\
-    'LINE:'+address+'#1A50BC:'+alias\
-    'HRULE:'+str(minAlarm)+':#0000FF:"Minimum Alarm"'\
-    'HRULE:'+str(maxAlarm)+':#0000FF:"Maximum Alarm"']
+    'LINE:'+address+'#1A50BC:'+alias,\
+    'HRULE:'+str(minAlarm)+'#0000FF:"Minimum Alarm"',\
+    'HRULE:'+str(maxAlarm)+'#0000FF:"Maximum Alarm"']
     
     rrdtool.graph(replaceArguments(arguments,'1h','Past hour'))
     rrdtool.graph(replaceArguments(arguments,'3h','Past 3 hours'))

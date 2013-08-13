@@ -12,7 +12,7 @@ if int(currentTime.tm_sec-30) < 0:
 else:
     currentHalfMinute = int(time.mktime(currentTime)-(currentTime.tm_sec-30))
 
-gSensors = [s.address for s in getSensors() if s.graph == True] #Addresses to graph
+gSensors = [s for s in getSensors() if s.graph == True] #Sensors to graph
 sensorTemps = [] #Array of tuples in this format: ([address],[temperature])
 
 for s in gSensors:

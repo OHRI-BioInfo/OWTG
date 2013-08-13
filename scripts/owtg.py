@@ -38,7 +38,7 @@ def getSensors():
             newSensor.address = params[1]
             newSensor.minAlarm = float(params[4])
             newSensor.maxAlarm = float(params[5])
-            if line.split(':')[3] == 'y':
+            if params[3] == 'y':
                 newSensor.graph = True
             dSensors.append(newSensor)
     return dSensors

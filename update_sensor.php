@@ -8,33 +8,34 @@ $graph = isset($_GET["graph"]);
 $minAlarm = $_GET["minAlarm"];
 $maxAlarm = $_GET["maxAlarm"];
 
-$error = False;
-$errorStuff ="<meta http-equiv=\"refresh\" content=\"3; url=/owdir.php\">\n
-<a href=\"/owdir.php\">Click here</a> if you are not redirected in 3 seconds.";
+$error = false;
+$redirect = "<meta http-equiv=\"refresh\" content=\"5; url=/owdir.php\">\n";
 
 
 if(strpos($alias,':') !== false){
-    $error = True;
+    $error = true;
+    echo $redirect;
     echo '[".$address."][Error] Alias contains invalid character \':\'<br>';
-    echo $errorStuff;
     exit(1);
 }
-if(preg_match('[^0-9.]',$minAlarm)){
-    $minAlarm = preg_replace('[^0-9.]','',$minAlarm);
-    $error = True;
+if(preg_match("/[^0-9.]/",$minAlarm) == 1){
+    $minAlarm = preg_replace("/[^0-9.]/",'',$minAlarm);
+    $error = true;
+    echo $redirect;
     echo "[".$address."][Warning] Minimum Alarm contained invalid characters which have been stripped.<br>\n";
-    echo "[".$address."][Warning] Minimum Alarm set to ".$minAlarm;
-    echo $errorStuff;
+    echo "[".$address."][Warning] Minimum Alarm set to ".$minAlarm."<br>";
 }
-if(preg_match('[^0-9.]',$maxAlarm)){
-    $maxAlarm = preg_replace('[^0-9.]','',$maxAlarm);
-    $error = True;
+if(preg_match("/[^0-9.]/",$maxAlarm) == 1){
+    $maxAlarm = preg_replace("/[^0-9.]/",'',$maxAlarm);
+    $error = true;
+    echo $redirect;
     echo "[".$address."][Warning] Maximum Alarm contained invalid characters which have been stripped.<br>\n";
-    echo "[".$address."][Warning] Maximum Alarm set to ".$maxAlarm;
-    echo $errorStuff;
+    echo "[".$address."][Warning] Maximum Alarm set to ".$maxAlarm."<br>";
 }
 if(!$error){
     header("location: /owdir.php");
+}else{
+    echo "<a href=\"/owdir.php\">Click here</a> if you are not redirected in 5 seconds.</a>";
 }
 $fileArray = file($sensorsFile,FILE_IGNORE_NEW_LINES);
 

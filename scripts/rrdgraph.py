@@ -32,7 +32,7 @@ for sensor in gSensors:
     'DEF:'+address+'=/opt/owtg/etc/graphing.rrd:'+address+':AVERAGE',\
     'LINE:'+address+'#1A50BC:'+alias,\
     'HRULE:'+str(minAlarm)+'#0000FF:"Minimum Alarm"',\
-    'HRULE:'+str(maxAlarm)+'#0000FF:"Maximum Alarm"']
+    'HRULE:'+str(maxAlarm)+'#FF0000:"Maximum Alarm"']
     
     rrdtool.graph(replaceArguments(arguments,'1h','Past hour'))
     rrdtool.graph(replaceArguments(arguments,'3h','Past 3 hours'))

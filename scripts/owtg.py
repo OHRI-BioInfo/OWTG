@@ -18,25 +18,27 @@ def getLines(filename):
             lineList_.append(line)
     return lineList_            
 
-def getSensors(graphOnly=False):
-    dAddresses = [] #already discovered addresses
-    gAddresses = [] #Addresses with "graph" turned on
+class OWTGSensor:
+    address = ''
+    alias = ''
+    minAlarm = 0.0
+    maxAlarm = 0.0
+    graph = False
+
+def getSensors():
+    dSensors = [] #Already discovered sensors
     
     lineList = getLines(sFilename)
 
     for line in lineList:
         if line:
-            dAddresses.append(line.split(':')[1])
+            params = line.split(':')
+            newSensor = OWTGSensor()
+            newSensor.alias = params[0]
+            newSensor.address = params[1]
+            newSensor.minAlarm = float(params[4])
+            newSensor.maxAlarm = float(params[5])
             if line.split(':')[3] == 'y':
-                gAddresses.append(line.split(':')[1])
-    if graphOnly:
-        return gAddresses
-    return dAddresses
-    
-def getAlias(address):
-    lineList = getLines(sFilename)
-    
-    for line in lineList:
-        if line:
-            if line.split(':')[1] == address:
-                return line.split(':')[0]
+                newSensor.graph = True
+            dSensors.append(newSensor)
+    return dSensors

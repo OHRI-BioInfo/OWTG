@@ -18,8 +18,48 @@
     input.alias{
         width: 8.5em;
     }
+    iframe{
+        padding:0px;
+        border:0px;
+        margin:0;
+    }
     </style>
-    <meta http-equiv="refresh" content="16">
+    <script>
+    function loadGraphs(address){
+        //If the graph is already loaded, clicking again should hide it
+        existingFrame = document.getElementById(address).getElementsByTagName('iframe')[0];
+        if(existingFrame != null){
+            existingFrame.parentNode.removeChild(existingFrame);
+            return;
+        }
+        
+        var frame=document.createElement('iframe');
+        frame.src = 'showgraphs.php?address='+address;
+        frame.width = 10;
+        frame.height = 10;
+        document.getElementById(address).appendChild(frame);
+        setInterval(function(){
+            var curHeight = 0;
+            if(frame.contentWindow != null){
+                curHeight = frame.contentWindow.document.body.scrollHeight;
+            
+                //Hacky way of determining when the thing is fully loaded; the height will increase
+                if(curHeight > 10){
+                    //When it is done loading, set the frame's height to cover the graphs
+                    frame.height = curHeight;
+                    frame.width = frame.contentWindow.document.body.scrollWidth;
+                    frame.contentWindow.document.body.style.padding = 0;
+                    frame.contentWindow.document.body.style.margin = 0;
+
+                    clearInterval();
+                }
+            }else{
+                clearInterval();
+            }
+        },5);
+    }
+    </script>
+    <!--<meta http-equiv="refresh" content="16">-->
 </head>
 <body>
 <?php
@@ -74,8 +114,9 @@ function getSensors(){
 
 echo "<table>\n";
 $i=1;
-echo "<th>Device Address</th><th>Discovery Date</th><th>Temperature</th><th>Online</th>";
-echo "<th>Alias</th><th>Min. Alarm</th><th>Max. Alarm</th><th>Graph?</th><th>Modify</th>\n";
+echo "<th>Device Address</th><th>Discovery<br>Date</th><th>Temp.</th><th>Online</th>";
+echo "<th>Alias</th><th>Min.<br>Alarm</th><th>Max.<br>Alarm</th><th>Graph?</th><th>Modify</th>\n";
+echo "<th>Mass Modify</th>";
 foreach(getSensors() as $curSensor){
     $online = 'No'; #String to describe online status
     $checked = ''; #If this is set to "checked", then the checkbox will be checked
@@ -87,7 +128,8 @@ foreach(getSensors() as $curSensor){
         echo "<tr style=\"background-color:lightgrey;\">\n";
     else
         echo "<tr>\n";
-    echo "<td><a href=\"showgraphs.php?address=".$curSensor->address."\">".$curSensor->address."</a></td>\n";
+    echo "<td id=\"".$curSensor->address."\" width=500px><a href=\"javascript:loadGraphs('"
+        .$curSensor->address."');\">".$curSensor->address."</a></td>\n";
     echo "<td>".date("d M Y H:i:s T",$curSensor->timestamp)."</td>\n";
     echo "<td>".$ow->read("/".$curSensor->address."/temperature")."</td>\n";
     echo "<td>".$online."</td>\n";

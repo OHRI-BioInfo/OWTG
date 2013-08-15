@@ -8,6 +8,9 @@
         border: 1px solid black;
         padding: 4px;
     }
+    th{
+        font-size: 0.8em;
+    }
     input.alarms{
         width: 4em;
         margin-right:auto;
@@ -58,10 +61,22 @@
             }
         },5);
     }
+    
+    function showAll(){
+        //TODO
+    }
     </script>
     <!--<meta http-equiv="refresh" content="16">-->
 </head>
 <body>
+<h1>OWTG - One-Wire Temperature Grapher</h1>
+<h2>All Sensors Megagraph</h2>
+<?php
+$_GET['address'] = 'all';
+include "showgraphs.php";
+?>
+
+<h2>Individual Sensors and Configuration Area</h2>
 <?php
 include "settings.php";
 include "Sensor.php";

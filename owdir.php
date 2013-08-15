@@ -1,5 +1,6 @@
 <html>
 <head>
+    <title>OWTG</title>
     <style type="text/css">
     table{
         border-collapse:collapse;
@@ -25,6 +26,11 @@
         padding:0px;
         border:0px;
         margin:0;
+    }
+    span.bottomtext{
+        font-size:0.7em;
+        text-align:center;
+        display:block;
     }
     </style>
     <script>
@@ -143,7 +149,7 @@ foreach(getSensors() as $curSensor){
         echo "<tr style=\"background-color:lightgrey;\">\n";
     else
         echo "<tr>\n";
-    echo "<td id=\"".$curSensor->address."\" width=500px><a href=\"javascript:loadGraphs('"
+    echo "<td id=\"".$curSensor->address."\" width=490px><a href=\"javascript:loadGraphs('"
         .$curSensor->address."');\">".$curSensor->address."</a></td>\n";
     echo "<td>".date("d M Y H:i:s T",$curSensor->timestamp)."</td>\n";
     echo "<td>".$ow->read("/".$curSensor->address."/temperature")."</td>\n";
@@ -163,5 +169,9 @@ echo "</table>\n";
 unset($ow);
 
 ?>
+<br>
+<span class="bottomtext"><a href="https://github.com/Frogging101/OWTG">OWTG on GitHub</a><br>
+&#169; 2013 OHRI | Created by John Brooks
+</span>
 </body>
 </html>

@@ -1,7 +1,7 @@
 import rrdtool
 import os
 import time
-from owtg import adbFilename, gdbFilename
+from owtg import adbFilename, gdbFilename, etcDir
 from math import ceil
 import shutil
 
@@ -40,7 +40,7 @@ width = 400
 
 dbFilenames = [adbFilename,gdbFilename]
 
-lockFile = open('/opt/owtg/etc/allowRun','w+')
+lockFile = open(etcDir+'allowRun','w+')
 lockFile.write('0')
 lockFile.close()
 

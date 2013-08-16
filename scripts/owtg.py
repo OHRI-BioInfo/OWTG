@@ -1,6 +1,7 @@
-sFilename = '/opt/owtg/etc/sensors'
-adbFilename = '/opt/owtg/etc/archive.rrd'
-gdbFilename = '/opt/owtg/etc/graphing.rrd'
+etcDir = '/opt/owtg/etc/'
+sFilename = etcDir+'sensors'
+adbFilename = etcDir+'archive.rrd'
+gdbFilename = etcDir+'graphing.rrd'
 
 def getLines(filename):
     file_ = open(filename,'r') #Open file for reading

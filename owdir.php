@@ -20,7 +20,7 @@
         display:block;
     }
     input.alias{
-        width: 8.5em;
+        width: 12em;
     }
     iframe{
         padding:0px;
@@ -135,9 +135,8 @@ function getSensors(){
 
 echo "<table>\n";
 $i=1;
-echo "<th>Device Address</th><th>Discovery<br>Date</th><th>Temp.</th><th>Online</th>";
-echo "<th>Alias</th><th>Min.<br>Alarm</th><th>Max.<br>Alarm</th><th>Graph?</th><th>Modify</th>\n";
-echo "<th>Mass Modify</th>";
+echo "<th>Device Address</th><th>Alias</th><th>Discovery<br>Date</th><th>Temp.</th><th>Online</th>";
+echo "<th>Min.<br>Alarm</th><th>Max.<br>Alarm</th><th>Graph?</th><th>Modify</th>\n";
 foreach(getSensors() as $curSensor){
     $online = 'No'; #String to describe online status
     $checked = ''; #If this is set to "checked", then the checkbox will be checked
@@ -151,16 +150,15 @@ foreach(getSensors() as $curSensor){
         echo "<tr>\n";
     echo "<td id=\"".$curSensor->address."\" width=490px><a href=\"javascript:loadGraphs('"
         .$curSensor->address."');\">".$curSensor->address."</a></td>\n";
+    echo "<td><input name=\"alias\" type=\"text\" value=\"".$curSensor->alias."\" class=\"alias\"></td>\n";
     echo "<td>".date("d M Y H:i:s T",$curSensor->timestamp)."</td>\n";
     echo "<td>".$ow->read("/".$curSensor->address."/temperature")."</td>\n";
     echo "<td>".$online."</td>\n";
     echo "<form name=\"form".$i."\" action=\"update_sensor.php\" method=\"get\">\n";
     echo "<input type=\"hidden\" name=\"address\" value=\"".$curSensor->address."\" />\n";
-    echo "<td><input name=\"alias\" type=\"text\" value=\"".$curSensor->alias."\" class=\"alias\"></td>\n";
     echo "<td><input name=\"minAlarm\" type=\"number\" value=\"".$curSensor->minAlarm."\" class=\"alarms\"></td>";
     echo "<td><input name=\"maxAlarm\" type=\"number\" value=\"".$curSensor->maxAlarm."\" class=\"alarms\"></td>";
     echo "<td><input name=\"graph\" type=\"checkbox\" value=\"graph\" ".$checked."></td>\n";
-    echo "<td><input type=\"submit\" value=\"Modify\"></td></form>\n";
     echo "</tr>\n";
     $i++;
 }

@@ -40,16 +40,19 @@
     <script>
     function loadGraphs(address){
         //If the graph is already loaded, clicking again should hide it
-        existingFrame = document.getElementById(address).getElementsByTagName('iframe')[0];
-        if(existingFrame != null){
-            existingFrame.parentNode.removeChild(existingFrame);
+        var parent = document.getElementById(address)
+        if(parent.getElementsByTagName('iframe')[0] != null){
+            parent.removeChild(parent.getElementsByTagName('iframe')[0]);
+            parent.removeChild(parent.getElementsByTagName('br')[0]);
             return;
         }
         
+        var lineBreak = document.createElement('br');
         var frame=document.createElement('iframe');
         frame.src = 'showgraphs.php?address='+address;
         frame.width = 10;
         frame.height = 10;
+        document.getElementById(address).appendChild(lineBreak);
         document.getElementById(address).appendChild(frame);
         setInterval(function(){
             var curHeight = 0;

@@ -1,3 +1,5 @@
+import os
+
 etcDir = '/opt/owtg/etc/'
 sFilename = etcDir+'sensors'
 adbFilename = etcDir+'archive.rrd'
@@ -43,3 +45,9 @@ def getSensors():
                 newSensor.graph = True
             dSensors.append(newSensor)
     return dSensors
+    
+def dbExists():
+    exists = True
+    if not os.path.exists(adbFilename) or not os.path.exists(gdbFilename):
+        exists = False
+    return exists

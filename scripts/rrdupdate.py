@@ -3,6 +3,8 @@ import ownet
 import rrdtool
 from owtg import *
 
+if not dbExists():
+    exit(1)
 ownet.init('localhost:4304')
 
 currentTime = time.localtime()

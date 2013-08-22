@@ -2,6 +2,9 @@ from owtg import *
 from string import replace
 import rrdtool
 
+if not dbExists():
+    exit(1)
+
 #This is the width of the graph canvas, where the data is displayed.
 #It must be the same as the width specified in rrdgen.py *when the RRD files were generated*
 #Default: 400

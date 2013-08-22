@@ -27,6 +27,10 @@
         border:0px;
         margin:0;
     }
+    span.warning{
+        color: red;
+        font-size: 2em;
+    }
     span.bottomtext{
         font-size:0.7em;
         text-align:center;
@@ -78,13 +82,17 @@
 <h1>OWTG - One-Wire Temperature Grapher</h1>
 <h2>All Sensors Megagraph</h2>
 <?php
+include "settings.php";
+if(!file_exists($adbFilename) || !file_exists($gdbFilename)){
+    echo "<span class=\"warning\">WARNING: Database file(s) do not exist or cannot be found. \
+    Run rrdgen.py in ".$etcDir." to create them.</span>";
+}
 $_GET['address'] = 'all';
 include "showgraphs.php";
 ?>
 
 <h2>Individual Sensors and Configuration Area</h2>
 <?php
-include "settings.php";
 include "Sensor.php";
 include "/opt/owfs/share/php/OWNet/ownet.php";
 $ow = new OWNet($adapter);

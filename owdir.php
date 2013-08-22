@@ -159,6 +159,7 @@ foreach(getSensors() as $curSensor){
     echo "<td><input name=\"minAlarm\" type=\"number\" value=\"".$curSensor->minAlarm."\" class=\"alarms\"></td>";
     echo "<td><input name=\"maxAlarm\" type=\"number\" value=\"".$curSensor->maxAlarm."\" class=\"alarms\"></td>";
     echo "<td><input name=\"graph\" type=\"checkbox\" value=\"graph\" ".$checked."></td>\n";
+    echo "<td><input type=\"submit\" value=\"Modify\"></td></form>\n"; 
     echo "</tr>\n";
     $i++;
 }

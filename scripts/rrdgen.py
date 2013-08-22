@@ -95,20 +95,26 @@ def createDB(dbType):
                     dataSources, archives,
                     '--start',str(currentMinute))
 
+choice = 'null'
+
 for dbFilename in dbFilenames:
     if os.path.exists(dbFilename):
-        print('The database ' + dbFilename + ' already exists. If you continue, it will be overwritten. ')
+        print('The database file(s) already exist. If you continue, it will be overwritten. ')
         if not noBackup:
             print('A backup will be made (this will erase any existing backup).')
         else:
             print('A backup will not be made and you WILL lose data.')
         #Input verification loop
         while True:
-            choice = raw_input('\nDo you want to continue (yes/no)? ')
+            if choice == 'null':    
+                #Only ask for a choice if it hasn't been made already for another file
+                #This ensures that either both files will be created, or neither will be
+                choice = raw_input('\nDo you want to continue (yes/no)? ')
             if choice == 'no':
                 exit(0)
             elif choice != 'yes':
                 print('Invalid choice. Please try again.')
+                choice = 'null'
                 continue
             break
         if not noBackup:

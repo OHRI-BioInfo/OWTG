@@ -20,9 +20,9 @@ initialDSCount = 20
 years = 1
 
 #The interval, in seconds, that the RRD file will be updated with values.
-#For correct operation this MUST be a multiple of 60 (as cron only operates in minutes)
-#and must be equal to the interval in minutes that cron runs the update script.
-#60 (one minute) is the minimum, and will give you maximum resolution.
+#30 (30 seconds) is the minimum, and will give you maximum resolution.
+#A <1 minute step is achieved with a sleep function in minute.sh; if you change this step
+#then use that function as well as cron to make sure the timings are matched up with this value
 #You should not need to change this value.
 #Default: 30
 step = 30
@@ -32,7 +32,6 @@ step = 30
 noBackup = False
 
 #The width, in pixels, of the canvas of the graphs that will be generated with this RRD.
-#If you change this, you must change width in rrdgraph.py to the same value.
 #Default: 400
 width = 400
 
@@ -40,9 +39,8 @@ width = 400
 
 dbFilenames = [adbFilename,gdbFilename]
 
-lockFile = open(etcDir+'allowRun','w+')
-lockFile.write('0')
-lockFile.close()
+datSet('allowRun','0')
+datSet('width',str(width))
 
 if step<30:
     print('ERROR: Step cannot be less than 30')
@@ -127,6 +125,4 @@ for dbFilename in dbFilenames:
         createDB('graphing')
     os.chmod(dbFilename,0666)
 
-lockFile = open('/opt/owtg/etc/allowRun','w+')
-lockFile.write('1')
-lockFile.close()
+datSet('allowRun','1')

@@ -2,18 +2,18 @@ from owtg import *
 from string import replace
 import rrdtool
 
+if datGet('allowRun') != '1':
+    exit(0)
+
 if not dbExists():
     exit(1)
-
-#This is the width of the graph canvas, where the data is displayed.
-#It must be the same as the width specified in rrdgen.py *when the RRD files were generated*
-#Default: 400
-width = 400
 
 #Path to generate the graphs. You should not need to change this unless your webserver
 #root is elsewhere.
 #Default: /var/www/graphs
 graphsPath = '/var/www/graphs/'
+
+width = datGet('width')
 
 gSensors = [s for s in getSensors() if s.graph == True]
 colors = ['#9BC4E5','#310106','#04640D','#FEFB0A','#FB5514','#E115C0','#00587F','#0BC582','#FEB8C8','#9E8317','#01190F','#847D81','#58018B','#B70639','#703B01','#F7F1DF',

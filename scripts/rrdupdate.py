@@ -3,6 +3,9 @@ import ownet
 import rrdtool
 from owtg import *
 
+if datGet('allowRun') != '1':
+    exit(0)
+
 if not dbExists():
     exit(1)
 ownet.init('localhost:4304')

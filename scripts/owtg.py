@@ -4,6 +4,7 @@ etcDir = '/opt/owtg/etc/'
 sFilename = etcDir+'sensors'
 adbFilename = etcDir+'archive.rrd'
 gdbFilename = etcDir+'graphing.rrd'
+owtgDatPath = etcDir+'owtg.dat'
 
 def getLines(filename):
     file_ = open(filename,'r') #Open file for reading
@@ -51,3 +52,35 @@ def dbExists():
     if not os.path.exists(adbFilename) or not os.path.exists(gdbFilename):
         exists = False
     return exists
+
+def datCreate():
+    owtgDat = open(owtgDatPath,'w+')
+    owtgDat.writelines(['allowRun=\x80=1\n','width=\x80=\n','email=\x80='])
+    owtgDat.close()
+
+def datGetDictList():
+    if not os.path.exists(owtgDatPath):
+        datCreate()
+    dicts = []
+    lineList = getLines(owtgDatPath)
+    for l in lineList:
+        dicts.append({'param':l.split('=\x80=')[0],'value':l.split('=\x80=')[1]})
+    return dicts
+    
+def datGet(param):
+    dicts = datGetDictList()
+    for d in dicts:
+        if d['param'] == param:
+            return d['value']
+
+def datSet(param,value):
+    dicts = datGetDictList()
+    datOutput = []
+    
+    for d in dicts:
+        if d['param'] == param:
+            d['value'] = value
+        datOutput.append(d['param']+'=\x80='+d['value']+'\n')
+    owtgDat = open(owtgDatPath,'w')
+    owtgDat.writelines(datOutput)
+    owtgDat.close()

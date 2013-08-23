@@ -3,6 +3,9 @@ import rrdtool
 from owtg import *
 from time import localtime, mktime
 
+if datGet('allowRun') != '1':
+    exit(0)
+
 ownet.init('localhost:4304')
 
 dAddresses = [s.address for s in getSensors()] #already discovered addresses

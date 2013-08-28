@@ -26,10 +26,9 @@ if datGet('allowRun') != '1':
 if not dbExists():
     exit(1)
 
-#Path to generate the graphs. You should not need to change this unless your webserver
-#root is elsewhere.
+#Path to generate the graphs. You should not need to change this.
 #Default: /var/www/graphs
-graphsPath = '/var/www/graphs/'
+graphsPath = webRoot+'graphs/'
 
 if not path.exists(graphsPath):
     os.mkdir(graphsPath)

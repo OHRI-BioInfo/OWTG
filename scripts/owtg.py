@@ -18,6 +18,7 @@
 import os
 
 etcDir = '/opt/owtg/etc/'
+webRoot = '/var/www/'
 sFilename = etcDir+'sensors'
 adbFilename = etcDir+'archive.rrd'
 gdbFilename = etcDir+'graphing.rrd'

@@ -17,6 +17,7 @@
 
 from owtg import *
 from string import replace
+from os import path, makedirs
 import rrdtool
 
 if datGet('allowRun') != '1':
@@ -29,6 +30,9 @@ if not dbExists():
 #root is elsewhere.
 #Default: /var/www/graphs
 graphsPath = '/var/www/graphs/'
+
+if not path.exists(graphsPath):
+    os.mkdir(graphsPath)
 
 width = datGet('width')
 

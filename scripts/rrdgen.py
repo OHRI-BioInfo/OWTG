@@ -18,7 +18,7 @@
 import rrdtool
 import os
 import time
-from owtg import adbFilename, gdbFilename, etcDir
+from owtg import *
 from math import ceil
 import shutil
 

@@ -27,7 +27,7 @@ $minAlarm = $_GET["minAlarm"];
 $maxAlarm = $_GET["maxAlarm"];
 
 $error = false;
-$redirect = "<meta http-equiv=\"refresh\" content=\"5; url=/owdir.php\">\n";
+$redirect = "<meta http-equiv=\"refresh\" content=\"5; url=owdir.php\">\n";
 
 
 if(strpos($alias,':') !== false){
@@ -58,9 +58,9 @@ if(floatval($maxAlarm) <= floatval($minAlarm)){
 }
 
 if(!$error){
-    header("location: /owdir.php");
+    header("location: owdir.php");
 }else{
-    echo "<a href=\"/owdir.php\">Click here</a> if you are not redirected in 5 seconds.</a>";
+    echo "<a href=\"owdir.php\">Click here</a> if you are not redirected in 5 seconds.</a>";
 }
 $fileArray = file($sensorsFile,FILE_IGNORE_NEW_LINES);
 

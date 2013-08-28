@@ -1,3 +1,4 @@
+#!/bin/bash
 #   Copyright (C) 2013 OHRI 
 #
 #   This file is part of OWTG.
@@ -15,7 +16,6 @@
 #   You should have received a copy of the GNU General Public License
 #   along with OWTG.  If not, see <http://www.gnu.org/licenses/>.
 
-#!/bin/bash
 #This should be called in crontab like this:
 #* * * * * bash /opt/owtg/bin/minute.sh
 #Use the sleep function to help you use intervals other than

@@ -199,7 +199,7 @@ unset($ow);
 
 ?>
 <br>
-<span class="bottomtext"><a href="https://github.com/Frogging101/PortraitCaption">PortraitCaption on GitHub</a><br>
+<span class="bottomtext"><a href="https://github.com/Frogging101/OWTG">OWTG on GitHub</a><br>
 &#169; 2013 OHRI | Created by John Brooks<br><br>
 
 <a href=http://www.gnu.org/licenses/gpl.html><img src="images/gplv3-88x31.png" alt="Licensed under GPLv3"></a></span>

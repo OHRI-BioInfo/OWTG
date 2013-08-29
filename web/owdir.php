@@ -206,8 +206,15 @@ foreach(getSensors() as $curSensor){
     $i++;
 }
 echo "</table>\n";
-
 unset($ow);
+
+$outputArray = array();
+exec("cd ".$etcDir."../bin;python -c \"import owtg;print owtg.datGet('email')\"",$outputArray);
+echo "<br>\n";
+echo "<form name=\"alertemail\" action=\"update_email.php\" method=\"get\">";
+echo "<b>Alert email address: </b><input name=\"email\" type=\"email\" value=\"".$outputArray[0]."\">\n";
+echo "<input type=\"submit\" value=\"Modify\">";
+echo "</form>";
 
 ?>
 <br>

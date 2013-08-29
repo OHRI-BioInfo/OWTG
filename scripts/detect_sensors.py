@@ -20,9 +20,14 @@ import ownet
 import rrdtool
 from owtg import *
 from time import localtime, mktime
+from os import path
 
 if datGet('allowRun') != '1':
     exit(0)
+    
+if not path.exists(sFilename):
+    sFile = open(sFilename,'w+')
+    sFile.close()
 
 ownet.init('localhost:4304')
 

@@ -27,14 +27,20 @@ $minAlarm = $_GET["minAlarm"];
 $maxAlarm = $_GET["maxAlarm"];
 
 $error = false;
+$fatal = false;
 $redirect = "<meta http-equiv=\"refresh\" content=\"5; url=owdir.php\">\n";
-
 
 if(strpos($alias,':') !== false){
     $error = true;
+    $fatal = true;
     echo $redirect;
-    echo '[".$address."][Error] Alias contains invalid character \':\'<br>';
-    exit(1);
+    echo "[".$address."][Error] Alias contains invalid character ':'<br>";
+}
+if($alias[0] == '#'){
+    $error = true;
+    $fatal = true;
+    echo $redirect;
+    echo "[".$address."][Error] Alias cannot start with '#'<br>";
 }
 if(preg_match("/[^0-9.]/",$minAlarm) == 1){
     $minAlarm = preg_replace("/[^0-9.]/",'',$minAlarm);
@@ -52,15 +58,17 @@ if(preg_match("/[^0-9.]/",$maxAlarm) == 1){
 }
 if(floatval($maxAlarm) <= floatval($minAlarm)){
     $error = true;
-    #error - max must be greater than min
+    $fatal = true;
+    echo "[".$address."][Error] Minimum Alarm cannot be greater than Maximum Alarm.<br>\n";
     echo $redirect;
-    exit(1);
 }
 
-if(!$error){
+if(!$error)
     header("location: owdir.php");
-}else{
+else{
     echo "<a href=\"owdir.php\">Click here</a> if you are not redirected in 5 seconds.</a>";
+    if($fatal)
+        exit(1);
 }
 $fileArray = file($sensorsFile,FILE_IGNORE_NEW_LINES);
 

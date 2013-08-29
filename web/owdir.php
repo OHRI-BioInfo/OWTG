@@ -117,20 +117,27 @@ include "showgraphs.php";
 <?php
 include "Sensor.php";
 include "/opt/owfs/share/php/OWNet/ownet.php";
+
 $ow = new OWNet($adapter);
+if(@$ow->dir("/") == null)
+    $noOW = True;
+
 
 function isAddressOnline($address){
 	global $ow;
-    #Get directory listing, separate into an array
-    $directoryArray = explode(",",$ow->dir("/")["data"]);
-    foreach ($directoryArray as $currentDir){
-        #We don't want to include this directory, 
-        #as although it has a "temperature" file, it is not a device
-        if($currentDir == "/simultaneous")
-            continue;
-        if($ow->read($currentDir."/temperature") != NULL){
-            if($ow->read($currentDir."/address") == $address)
-                return True;
+    global $noOW;
+    if(!$noOW){
+        #Get directory listing, separate into an array
+        $directoryArray = explode(",",$ow->dir("/")["data"]);
+        foreach ($directoryArray as $currentDir){
+            #We don't want to include this directory, 
+            #as although it has a "temperature" file, it is not a device
+            if($currentDir == "/simultaneous")
+                continue;
+            if($ow->read($currentDir."/temperature") != NULL){
+                if($ow->read($currentDir."/address") == $address)
+                    return True;
+            }
         }
     }
     return False;
@@ -139,6 +146,7 @@ function isAddressOnline($address){
 function getSensors(){
     global $sensorsFile;
     global $ow;
+    global $noOW;
     
     $sensorArray = array();
     $fileArray = file($sensorsFile,FILE_IGNORE_NEW_LINES);
@@ -156,6 +164,10 @@ function getSensors(){
             $newSensor->graph = False;
         $newSensor->minAlarm = floatval($discoveredArray[4]);
         $newSensor->maxAlarm = floatval($discoveredArray[5]);
+        if(!$noOW)
+            $newSensor->temperature = $ow->read("/".$newSensor->address."/temperature");
+        else
+            $newSensor->temperature = 'N/A';
         $newSensor->online = isAddressOnline($newSensor->address);
         
         $sensorArray[] = $newSensor;
@@ -183,7 +195,7 @@ foreach(getSensors() as $curSensor){
     echo "<form name=\"form".$i."\" action=\"update_sensor.php\" method=\"get\">\n";
     echo "<td><input name=\"alias\" type=\"text\" value=\"".$curSensor->alias."\" class=\"alias\"></td>\n";
     echo "<td>".date("d M Y H:i:s T",$curSensor->timestamp)."</td>\n";
-    echo "<td>".$ow->read("/".$curSensor->address."/temperature")."</td>\n";
+    echo "<td>".$curSensor->temperature."</td>\n";
     echo "<td>".$online."</td>\n";
     echo "<input type=\"hidden\" name=\"address\" value=\"".$curSensor->address."\" />\n";
     echo "<td><input name=\"minAlarm\" type=\"number\" value=\"".$curSensor->minAlarm."\" class=\"alarms\"></td>";

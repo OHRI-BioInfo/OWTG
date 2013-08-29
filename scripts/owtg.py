@@ -90,6 +90,7 @@ def datCreate():
     owtgDat = open(owtgDatPath,'w+')
     owtgDat.writelines(['allowRun=\x80=1\n','width=\x80=\n','email=\x80='])
     owtgDat.close()
+    chmod(0666,owtgDatPath)
 
 def datGetDictList():
     if not os.path.exists(owtgDatPath):
@@ -130,4 +131,4 @@ def alertmail(subject,body):
     
     smtp = smtplib.SMTP('localhost')
     smtp.sendmail(msg['From'],msg['To'],msg.as_string())
-    s.quit()
+    smtp.quit()

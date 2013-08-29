@@ -43,13 +43,13 @@ for s in sensorArray:
         subject = "Sensor \""+thisAlias+"\" - High Temperature Threshold Crossed!"
         body = "The sensor with identifier \""+thisAlias+"\" is above the maximum alarm level \
         of "+str(s.maxAlarm)+"C."
-        #print "high alarm"
-        #send email
+        print subject
+        alertmail(subject,body)
     if s.lastTemp > s.minAlarm and curTemp < s.minAlarm:
         subject = "Sensor \""+thisAlias+"\" - Low Temperature Threshold Crossed!"
         body = "The sensor with identifier \""+thisAlias+"\" is below the minimum alarm level \
         of "+str(s.minAlarm)+"C."
-        #print "low alarm"
+        print subject
         alertmail(subject,body)
     s.lastTemp = curTemp
     #[alias]:[address]:[timestamp]:[graph(y/n)]:[min-alarm]:[max-alarm]:[lasttemp]\n

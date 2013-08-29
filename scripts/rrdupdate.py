@@ -27,6 +27,31 @@ if datGet('allowRun') != '1':
 if not dbExists():
     exit(1)
 ownet.init('localhost:4304')
+newFile = [] #Array of lines to write out to file
+newFile.append(sFileTop) #Add comments to top of file
+
+sensorArray = getSensors()
+
+for s in sensorArray:
+    curTemp = float(ownet.Sensor('/'+s.address,'localhost',4304).temperature)
+    #If the temperature has crossed the maximum alarm threshold
+    if s.lastTemp < s.maxAlarm and curTemp > s.maxAlarm:
+        print "high alarm"
+        #send email
+    if s.lastTemp > s.minAlarm and curTemp < s.minAlarm:
+        print "low alarm"
+        #send email
+    s.lastTemp = curTemp
+    #[alias]:[address]:[timestamp]:[graph(y/n)]:[min-alarm]:[max-alarm]:[lasttemp]\n
+    if s.graph == True:
+        graphStr = 'y'
+    else:
+        graphStr = 'n'
+    newFile.append(s.alias+':'+s.address+':'+s.timestamp+':'+graphStr+':'+str(s.minAlarm)+':'+str(s.maxAlarm)+':'+str(s.lastTemp)+'\n')
+
+sFile = open(sFilename,'w') #sensors file, open for writing
+sFile.writelines(newFile)
+sFile.close()
 
 currentTime = time.localtime()
 currentHalfMinute = 0
@@ -35,7 +60,7 @@ if int(currentTime.tm_sec-30) < 0:
 else:
     currentHalfMinute = int(time.mktime(currentTime)-(currentTime.tm_sec-30))
 
-gSensors = [s for s in getSensors() if s.graph == True] #Sensors to graph
+gSensors = [s for s in sensorArray if s.graph == True] #Sensors to graph
 sensorTemps = [] #Array of tuples in this format: ([address],[temperature])
 
 for s in gSensors:

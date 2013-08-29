@@ -34,13 +34,23 @@ sensorArray = getSensors()
 
 for s in sensorArray:
     curTemp = float(ownet.Sensor('/'+s.address,'localhost',4304).temperature)
+    if s.alias != '':
+        thisAlias = s.alias
+    else:
+        thisAlias = s.address
     #If the temperature has crossed the maximum alarm threshold
     if s.lastTemp < s.maxAlarm and curTemp > s.maxAlarm:
-        print "high alarm"
+        subject = "Sensor \""+thisAlias+"\" - High Temperature Threshold Crossed!"
+        body = "The sensor with identifier \""+thisAlias+"\" is above the maximum alarm level \
+        of "+str(s.maxAlarm)+"C."
+        #print "high alarm"
         #send email
     if s.lastTemp > s.minAlarm and curTemp < s.minAlarm:
-        print "low alarm"
-        #send email
+        subject = "Sensor \""+thisAlias+"\" - Low Temperature Threshold Crossed!"
+        body = "The sensor with identifier \""+thisAlias+"\" is below the minimum alarm level \
+        of "+str(s.minAlarm)+"C."
+        #print "low alarm"
+        alertmail(subject,body)
     s.lastTemp = curTemp
     #[alias]:[address]:[timestamp]:[graph(y/n)]:[min-alarm]:[max-alarm]:[lasttemp]\n
     if s.graph == True:

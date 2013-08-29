@@ -17,6 +17,9 @@
 #   along with OWTG.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import smtplib
+import socket
+from email.mime.text import MIMEText
 
 etcDir = '/opt/owtg/etc/'
 webRoot = '/var/www/'
@@ -114,3 +117,17 @@ def datSet(param,value):
     owtgDat = open(owtgDatPath,'w')
     owtgDat.writelines(datOutput)
     owtgDat.close()
+    
+def alertmail(subject,body):
+    email = datGet('email')
+    if email == '':
+        return
+    msg = MIMEText(body)
+    
+    msg['Subject'] = subject
+    msg['From'] = "owtg@"+socket.gethostname()
+    msg['To'] = datGet('email')
+    
+    smtp = smtplib.SMTP('localhost')
+    smtp.sendmail(msg['From'],msg['To'],msg.as_string())
+    s.quit()

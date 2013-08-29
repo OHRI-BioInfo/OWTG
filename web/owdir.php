@@ -180,11 +180,11 @@ foreach(getSensors() as $curSensor){
         echo "<tr>\n";
     echo "<td id=\"".$curSensor->address."\" width=490px><a href=\"javascript:loadGraphs('"
         .$curSensor->address."');\">".$curSensor->address."</a></td>\n";
+    echo "<form name=\"form".$i."\" action=\"update_sensor.php\" method=\"get\">\n";
     echo "<td><input name=\"alias\" type=\"text\" value=\"".$curSensor->alias."\" class=\"alias\"></td>\n";
     echo "<td>".date("d M Y H:i:s T",$curSensor->timestamp)."</td>\n";
     echo "<td>".$ow->read("/".$curSensor->address."/temperature")."</td>\n";
     echo "<td>".$online."</td>\n";
-    echo "<form name=\"form".$i."\" action=\"update_sensor.php\" method=\"get\">\n";
     echo "<input type=\"hidden\" name=\"address\" value=\"".$curSensor->address."\" />\n";
     echo "<td><input name=\"minAlarm\" type=\"number\" value=\"".$curSensor->minAlarm."\" class=\"alarms\"></td>";
     echo "<td><input name=\"maxAlarm\" type=\"number\" value=\"".$curSensor->maxAlarm."\" class=\"alarms\"></td>";

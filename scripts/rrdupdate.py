@@ -33,25 +33,32 @@ newFile.append(sFileTop) #Add comments to top of file
 sensorArray = getSensors()
 
 for s in sensorArray:
-    curTemp = float(ownet.Sensor('/'+s.address,'localhost',4304).temperature)
-    if s.alias != '':
-        thisAlias = s.alias
+    error = False
+    try:
+        curTemp = float(ownet.Sensor('/'+s.address,'localhost',4304).temperature)
+    except:
+        error = True
+    if not error:
+        if s.alias != '':
+            thisAlias = s.alias
+        else:
+            thisAlias = s.address
+        #If the temperature has crossed the maximum alarm threshold
+        if s.lastTemp < s.maxAlarm and curTemp > s.maxAlarm and s.lastTemp != None:
+            subject = "Sensor \""+thisAlias+"\" - High Temperature Threshold Crossed!"
+            body = "The sensor with identifier \""+thisAlias+"\" is above the maximum alarm level \
+            of "+str(s.maxAlarm)+"C."
+            print subject
+            alertmail(subject,body)
+        if s.lastTemp > s.minAlarm and curTemp < s.minAlarm and s.lastTemp != None:
+            subject = "Sensor \""+thisAlias+"\" - Low Temperature Threshold Crossed!"
+            body = "The sensor with identifier \""+thisAlias+"\" is below the minimum alarm level \
+            of "+str(s.minAlarm)+"C."
+            print subject
+            alertmail(subject,body)
+        s.lastTemp = curTemp
     else:
-        thisAlias = s.address
-    #If the temperature has crossed the maximum alarm threshold
-    if s.lastTemp < s.maxAlarm and curTemp > s.maxAlarm:
-        subject = "Sensor \""+thisAlias+"\" - High Temperature Threshold Crossed!"
-        body = "The sensor with identifier \""+thisAlias+"\" is above the maximum alarm level \
-        of "+str(s.maxAlarm)+"C."
-        print subject
-        alertmail(subject,body)
-    if s.lastTemp > s.minAlarm and curTemp < s.minAlarm:
-        subject = "Sensor \""+thisAlias+"\" - Low Temperature Threshold Crossed!"
-        body = "The sensor with identifier \""+thisAlias+"\" is below the minimum alarm level \
-        of "+str(s.minAlarm)+"C."
-        print subject
-        alertmail(subject,body)
-    s.lastTemp = curTemp
+        s.lastTemp = 'NaN'
     #[alias]:[address]:[timestamp]:[graph(y/n)]:[min-alarm]:[max-alarm]:[lasttemp]\n
     if s.graph == True:
         graphStr = 'y'
@@ -74,7 +81,10 @@ gSensors = [s for s in sensorArray if s.graph == True] #Sensors to graph
 sensorTemps = [] #Array of tuples in this format: ([address],[temperature])
 
 for s in gSensors:
-    sensorTemps.append((s.address,str(ownet.Sensor('/'+s.address,'localhost',4304).temperature)))
+    try:
+        sensorTemps.append((s.address,str(ownet.Sensor('/'+s.address,'localhost',4304).temperature)))
+    except:
+        sensorTemps.append((s.address,'NaN'))
     
 template = ''
 for sensor in sensorTemps:

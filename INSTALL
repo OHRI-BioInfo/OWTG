@@ -1,5 +1,7 @@
 =====Compiling and installing OWFS 2.9p1=====
-Due to (mostly alias-related) bugs in the version on the Ubuntu repositories, it is necessary to compile a later version. Compiling OWFS from source is fairly straightforward.
+Due to (mostly alias-related) bugs in the version on the Ubuntu repositories, it is
+necessary to compile a later version. Compiling OWFS from source is fairly
+straightforward.
 
 Dependencies:
 - libusb-dev
@@ -8,9 +10,11 @@ You must install these before proceeding; they are available in the Ubuntu repos
 
 To compile and install OWFS:
 
-1. Make sure that the repository version of OWFS and all related components have been removed.
+1. Make sure that the repository version of OWFS and all related components have been 
+removed.
 
-2. Download owfs-2.9p1.tar.gz from http://sourceforge.net/projects/owfs/files/owfs/2.9p1/owfs-2.9p1.tar.gz/download
+2. Download owfs-2.9p1.tar.gz from 
+http://sourceforge.net/projects/owfs/files/owfs/2.9p1/owfs-2.9p1.tar.gz/download
 
 3. Extract it and cd into the directory
 
@@ -28,9 +32,16 @@ It is now installed in /opt/owfs/, and the binary files are in /opt/owfs/bin/.
 
 =====Installing OWTG=====
 
-To allow sensors in multiple areas and connected to different computers to be accessible from one machine and web interface, we use a feature of owserver that allows one to use another server address as a bus master, which makes any sensors seen by a remote server accessible as if they were connected locally.
+To allow sensors in multiple areas and connected to different computers to be accessible
+from one machine and web interface, we use a feature of owserver that allows one to use
+another server address as a bus master, which makes any sensors seen by a remote 
+server accessible as if they were connected locally.
 
-The machine that hosts the web interface and generates the graphs will be called the "master", and the machines that only run owserver will be called "slaves". Slave machines use no owfs.conf (as they don't need to have servers added), and they don't really run any OWTG scripts; they run owserver and listen for connections from a master which will connect to them and track their sensors.
+The machine that hosts the web interface and generates the graphs will be called the 
+"master", and the machines that only run owserver will be called "slaves".
+Slave machines use no owfs.conf (as they don't need to have servers added), and they
+don't really run any OWTG scripts; they run owserver and listen for connections from a
+master which will connect to them and track their sensors.
 
 Both masters and slaves can be connected to sensors.
 
@@ -47,13 +58,16 @@ touch /opt/owtg/etc/sensors
 chmod 666 /opt/owtg/etc/sensors
 
 ---
-This will create the necessary directories for owtg to function and a blank owfs.conf. Now some configuration is required.
+This will create the necessary directories for owtg to function and a blank owfs.conf.
+Now some configuration is required.
 
-If apache and PHP are not installed, install them. You will also need python-rrdtool to interface with owserver. This command should work on Debian-based distros:
+If apache and PHP are not installed, install them. You will also need python-rrdtool to
+interface with owserver. This command should work on Debian-based distros:
 ---
 sudo apt-get install apache2 php5 python-rrdtool
 ---
-Also, if you havent't already, compile and install OWFS by following the instructions in the section "Compiling and installing OWFS 2.9p1"
+Also, if you havent't already, compile and install OWFS by following the instructions
+in the section "Compiling and installing OWFS 2.9p1"
 
 1. Copy owfs.conf to /opt/owtg/etc/2. 
 
@@ -63,20 +77,23 @@ sudo /opt/owfs/bin/owserver -c /opt/owtg/etc/owfs.conf
 ---
 somewhere before "exit 0". This will start owserver when the machine is booted.
 
-3. Copy the contents of "scripts" to /opt/owfs/bin/ and "web" to /var/www (or whatever the root directory is on your webserver)
+3. Copy the contents of "scripts" to /opt/owfs/bin/ and "web" to /var/www (or whatever
+the root directory is on your webserver)
 
 4. Run this command to change the permissions of the scripts:
 ---
 chmod 0755 /opt/owtg/bin/*
 ---
 
-5. Add these two lines to the bottom of your crontab (To do this you can use "crontab -e"):
+5. Add these two lines to the bottom of your crontab
+(To do this you can use "crontab -e"):
 ---
 * * * * * /opt/owtg/bin/minute.sh >> /dev/null 2>&1
 */5 * * * * /opt/owtg/bin/rrdgraph.py > /dev/null 2>&1
 ---
 
-6. Open rrdgen.py in /opt/owtg/bin and configure the options you want (do so at your own risk; most of these options are largely untested)
+6. Open rrdgen.py in /opt/owtg/bin and configure the options you want (do so at your own
+risk; most of these options are largely untested)
 
 7. Execute rrdgen.py:
 ---
@@ -84,9 +101,13 @@ chmod 0755 /opt/owtg/bin/*
 ---
 
 ====Slave====
-Slave machines make sensors connected to them available to the master. They do not host the web interface or update the database; and therefore configuring them is much easier. In fact, they don't actually require any of the files in this repository/archive.
+Slave machines make sensors connected to them available to the master. They do not host
+the web interface or update the database; and therefore configuring them is much easier.
+In fact, they don't actually require any of the files in this repository/archive.
 
-1. Follow the instructions in the section #Compiling and installing OWFS 2.9p1. You *may* be able to just copy the /opt/owfs directory from the master to the same place on the slave, but I have not tested this.
+1. Follow the instructions in the section #Compiling and installing OWFS 2.9p1.
+You *may* be able to just copy the /opt/owfs directory from the master to the same place
+on the slave, but I have not tested this.
 
 2. Open /etc/rc.local with a text editor and add this text somewhere before "exit 0":
 ---
@@ -95,10 +116,13 @@ sudo /opt/owfs/bin/owserver --usb=scan --port=localhost:4304
 
 3. Run the above command or restart the machine
 
-4. On the master, add the IP address of this slave to /opt/owtg/owfs.conf; the format for doing so should be apparent upon viewing this file.
+4. On the master, add the IP address of this slave to /opt/owtg/owfs.conf; the format
+for doing so should be apparent upon viewing this file.
 
 =====Extra Configuration=====
 
-In owtg.py there are global configuration variables with self-explanatory names; mostly file paths. In rrdgraph.py there is an option for where to store the graphs. And in rrdgen.py, there are various options for how the RRD file should be generated.
+In owtg.py there are global configuration variables with self-explanatory names; mostly
+file paths. In rrdgraph.py there is an option for where to store the graphs. And in
+rrdgen.py, there are various options for how the RRD file should be generated.
 
 All of these options are documented in their respective files.

@@ -21,15 +21,15 @@ from string import replace
 from os import path, makedirs
 import rrdtool
 
+#Path to generate the graphs. You should not need to change this.
+#Default: /var/www/graphs
+graphsPath = '/var/www/graphs'
+
 if datGet('allowRun') != '1':
     exit(0)
 
 if not dbExists():
     exit(1)
-
-#Path to generate the graphs. You should not need to change this.
-#Default: /var/www/graphs
-graphsPath = webRoot+'graphs/'
 
 if not path.exists(graphsPath):
     os.mkdir(graphsPath)

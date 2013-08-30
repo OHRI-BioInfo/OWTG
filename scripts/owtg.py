@@ -22,7 +22,6 @@ import socket
 from email.mime.text import MIMEText
 
 etcDir = '/opt/owtg/etc/'
-webRoot = '/var/www/'
 sFilename = etcDir+'sensors'
 adbFilename = etcDir+'archive.rrd'
 gdbFilename = etcDir+'graphing.rrd'

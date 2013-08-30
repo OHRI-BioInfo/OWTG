@@ -32,12 +32,16 @@ newFile.append(sFileTop) #Add comments to top of file
 
 sensorArray = getSensors()
 
+#Loop to compare current temperature with alarm levels
 for s in sensorArray:
     error = False
     try:
         curTemp = float(ownet.Sensor('/'+s.address,'localhost',4304).temperature)
     except:
         error = True
+    
+    #Only compare if there was no error getting the temperature; otherwise skip this and
+    #set lastTempt to NaN
     if not error:
         if s.alias != '':
             thisAlias = s.alias
@@ -59,6 +63,8 @@ for s in sensorArray:
         s.lastTemp = curTemp
     else:
         s.lastTemp = 'NaN'
+        
+    #Append line in this format:
     #[alias]:[address]:[timestamp]:[graph(y/n)]:[min-alarm]:[max-alarm]:[lasttemp]\n
     if s.graph == True:
         graphStr = 'y'
@@ -70,6 +76,8 @@ sFile = open(sFilename,'w') #sensors file, open for writing
 sFile.writelines(newFile)
 sFile.close()
 
+#The purpose of this currentHalfMinute thing is to ensure perfect synchronization with
+#the RRD's step and heartbeat.
 currentTime = time.localtime()
 currentHalfMinute = 0
 if int(currentTime.tm_sec-30) < 0: 
@@ -80,12 +88,16 @@ else:
 gSensors = [s for s in sensorArray if s.graph == True] #Sensors to graph
 sensorTemps = [] #Array of tuples in this format: ([address],[temperature])
 
+#For each sensor, append its address and temperature to the tuple array
 for s in gSensors:
     try:
         sensorTemps.append((s.address,str(ownet.Sensor('/'+s.address,'localhost',4304).temperature)))
     except:
-        sensorTemps.append((s.address,'NaN'))
+        #if the temperature could not be acquired, set this data point to U
+        sensorTemps.append((s.address,'U'))
     
+#Make a template for rrdtool update; this specifies the respective order in which data is
+#inserted
 template = ''
 for sensor in sensorTemps:
     template += sensor[0]+':'
@@ -94,7 +106,7 @@ template = template.rstrip(':')
 values = str(currentHalfMinute)+':'
 for sensor in sensorTemps:
     values += sensor[1]+':'
-values = values.rstrip(':')
+values = values.rstrip(':') #strip the trailing colon
 
-rrdtool.update(adbFilename,'-t',template,values)
-rrdtool.update(gdbFilename,'-t',template,values)
+rrdtool.update(adbFilename,'-t',template,values) #update archive rrd
+rrdtool.update(gdbFilename,'-t',template,values) #update graphing rrd

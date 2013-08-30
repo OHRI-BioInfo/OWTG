@@ -25,5 +25,5 @@ echo $argument;
 
 exec("cd ".$etcDir."../bin;python -c ".$argument." 2>&1",$output);
 print_r($output);
-#header("location: owdir.php");
+header("location: owdir.php");
 ?>

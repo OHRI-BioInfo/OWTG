@@ -69,7 +69,7 @@ for directory in ownet.Sensor('/','localhost',4304).sensorList():
 
 for a in newAddresses:
     #Build a string in the form of "[alias(empty)]:[address]:[timestamp]:[graph(y/n)]:[min-alarm]:[max-alarm]:[lasttemp]\n"
-    sensorLine = ':' + a + ':' + str(int(mktime(localtime()))) + ':n:20:30:NaN\n'
+    sensorLine = ':' + a + ':' + str(int(mktime(localtime()))) + ':y:20:30:NaN\n'
     #Append it to the new file line array
     newFile.append(sensorLine)
 
@@ -88,7 +88,7 @@ if dbExists():
             rrdtool.tune(adbFilename, '--data-source-rename', 'unclaimed_'+firstUnclaimed+':'+a)
             rrdtool.tune(gdbFilename, '--data-source-rename', 'unclaimed_'+firstUnclaimed+':'+a)
 
-newFile.sort()
+newFile.sort()  #Sort the sensors alphabetically, by alias (first param on the line)
 sFile = open(sFilename,'w') #sensors file, open for writing
 sFile.writelines(newFile)
 sFile.close()

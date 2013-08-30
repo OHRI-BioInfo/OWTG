@@ -28,12 +28,14 @@ graphsPath = '/var/www/graphs'
 if datGet('allowRun') != '1':
     exit(0)
 
+#If the RRD doesn't exist, don't run
 if not dbExists():
     exit(1)
 
 if not path.exists(graphsPath):
     os.mkdir(graphsPath)
 
+#Get width from .dat file, set in rrdgen
 width = datGet('width')
 
 gSensors = [s for s in getSensors() if s.graph == True]
@@ -59,6 +61,7 @@ def replaceArguments(arguments,time,title):
     arguments = [replace(s,'::-::',title) for s in arguments]
     return arguments
 
+#Generate a graph for each sensor
 for sensor in gSensors:
     alias = sensor.alias
     minAlarm = sensor.minAlarm
@@ -85,7 +88,6 @@ defs = []
 lines = []
 
 #Now we generate the graphs containing all sensors.
-
 for i,sensor in enumerate(gSensors):
     label = ''
     address = sensor.address

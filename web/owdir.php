@@ -119,9 +119,10 @@ include "Sensor.php";
 include "/opt/owfs/share/php/OWNet/ownet.php";
 
 $ow = new OWNet($adapter);
+#If owdir returns null for the root directory, then owserver is not running. In this
+#case, don't bother with anything for the most part.
 if(@$ow->dir("/") == null)
     $noOW = True;
-
 
 function isAddressOnline($address){
 	global $ow;
@@ -149,12 +150,14 @@ function getSensors(){
     global $noOW;
     
     $sensorArray = array();
-    $fileArray = file($sensorsFile,FILE_IGNORE_NEW_LINES);
+    $fileArray = file($sensorsFile,FILE_IGNORE_NEW_LINES); #Put sensors file into array
     foreach($fileArray as $line){
-        if($line[0] == '#')
+        if($line[0] == '#') #If the line has # as the first character, ignore it
             continue;
-        $discoveredArray = explode(":",$line);
-        $newSensor = new Sensor();
+        $discoveredArray = explode(":",$line); #Separate the parameters into an array
+        $newSensor = new Sensor(); #New sensor object
+        #The following assigns array indices to their respective values
+        #based on the predetermined format of the sensors file
         $newSensor->alias = $discoveredArray[0];
         $newSensor->address = $discoveredArray[1];
         $newSensor->timestamp = intval($discoveredArray[2]);
@@ -175,6 +178,8 @@ function getSensors(){
     return $sensorArray;
 }
 
+#The section below constructs a table with a row for each sensor. Understanding it is
+#easier if you look at the HTML output.
 echo "<table>\n";
 $i=1;
 echo "<th>Device Address</th><th>Alias</th><th>Discovery<br>Date</th><th>Temp.</th><th>Online</th>";
@@ -209,6 +214,7 @@ echo "</table>\n";
 unset($ow);
 
 $outputArray = array();
+#Get the currently set email address from datGet in the owtg python module
 exec("cd ".$etcDir."../bin;python -c \"import owtg;print owtg.datGet('email')\"",$outputArray);
 echo "<br>\n";
 echo "<form name=\"alertemail\" action=\"update_email.php\" method=\"get\">";
